@@ -17,6 +17,7 @@ const protectedRoutes = {
 
 import { Geist } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
+import { Orbitron } from "next/font/google";
 
 const primaryFont = Geist({
   variable: "--font-primary",
@@ -30,10 +31,16 @@ const monoFont = Geist_Mono({
   display: "swap",
 });
 
+const secondaryFont = Orbitron({
+  variable: "--font-secondary",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 const font = {
   primary: primaryFont,
-  secondary: primaryFont,
-  tertiary: primaryFont,
+  secondary: secondaryFont,
+  tertiary: secondaryFont,
   code: monoFont,
 };
 
