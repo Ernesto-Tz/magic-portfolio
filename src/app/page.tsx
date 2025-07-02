@@ -85,14 +85,17 @@ export default function Home() {
           </RevealFx>
         </Column>
       </Column>
+      <Heading as="h2" variant="display-strong-xs" wrap="balance">
+        Latest Projects
+      </Heading>
       <RevealFx translateY="16" delay={0.6}>
-        <Projects range={[1, 1]} />
+        <Projects range={[1, 2]} />
       </RevealFx>
       {routes["/blog"] && (
         <Flex fillWidth gap="24" mobileDirection="column">
           <Flex flex={1} paddingLeft="l" paddingTop="24">
             <Heading as="h2" variant="display-strong-xs" wrap="balance">
-              Latest from the blog
+              Recent from the blog
             </Heading>
           </Flex>
           <Flex flex={3} paddingX="20">
@@ -100,7 +103,6 @@ export default function Home() {
           </Flex>
         </Flex>
       )}
-      <Projects range={[2]} />
       {newsletter.display && <Mailchimp newsletter={newsletter} />}
     </Column>
   );
