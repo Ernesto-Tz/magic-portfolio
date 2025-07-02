@@ -147,6 +147,7 @@ const about = {
     institutions: [
       {
         name: "Obuda University, Hungary",
+        timeframe: "SEP 2017 - DIC 2021",
         description: <>Bachelor of Computer Science Engineering</>,
       },
     ],
