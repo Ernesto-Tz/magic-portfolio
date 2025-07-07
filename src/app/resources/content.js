@@ -53,15 +53,15 @@ const home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building smart solutions, from mobile apps to scalable platforms — I make It happen</>,
+  headline: <>5+ years of experience creating amazing digital products<br/> - I make It happen</>,
   featured: {
     display: true,
-    title: <>Working on: <strong className="ml-4">Vodafone Germany Webshop</strong></>,
+    title: <>Current project: <strong className="ml-4">Vodafone Germany Webshop</strong></>,
     href: "/work/german-oneshop",
   },
   subline: (
     <>
-      Passionate about building solutions by blending creativity and technical expertise to create amazing digital products.
+      I am passionate about building projects by blending creativity and technical knowledge
     </>
   ),
 };
@@ -87,9 +87,14 @@ const about = {
     title: "Introduction",
     description: (
       <>
-        Selene is a Jakarta-based design engineer with a passion for transforming complex challenges
-        into simple, elegant design solutions. Her work spans digital interfaces, interactive
-        experiences, and the convergence of design and technology.
+        I am a frontend developer based in Europe with extensive experience delivering projects. 
+        Over the past 5 years at an international company, I have collaborated with teams from various 
+        countries, gaining valuable insights into different cultures and workflows.
+        <br/> 
+        <br/> 
+        My adaptability, resilience, curiosity, and commitment to continuous development have enabled me to drive meaningful 
+        results—both in the short term and for long-term project success. I thrive in dynamic environments and am passionate 
+        about creating impactful, user-focused solutions.
       </>
     ),
   },
