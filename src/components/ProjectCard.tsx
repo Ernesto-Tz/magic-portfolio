@@ -2,6 +2,7 @@
 
 import {
   AvatarGroup,
+  Button,
   Carousel,
   Column,
   Flex,
@@ -64,13 +65,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             )}
             <Flex gap="24" wrap>
               {content?.trim() && (
-                <SmartLink
-                  suffixIcon="arrowRight"
-                  style={{ margin: "0", width: "fit-content" }}
-                  href={href}
-                >
-                  <Text variant="body-default-s">Read case study</Text>
-                </SmartLink>
+                <Button href={href} variant="secondary" prefixIcon="document">Project experience</Button>
               )}
               {link && (
                 <SmartLink
@@ -78,7 +73,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                   style={{ margin: "0", width: "fit-content" }}
                   href={link}
                 >
-                  <Text variant="body-default-s">View project</Text>
+                  <Text variant="body-default-s">Check the live project</Text>
                 </SmartLink>
               )}
             </Flex>
