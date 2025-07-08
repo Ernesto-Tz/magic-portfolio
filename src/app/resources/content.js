@@ -5,7 +5,7 @@ const person = {
     return `${this.firstName} ${this.lastName}`;
   },
   role: "Frontend Developer",
-  avatar: "/images/avatar.jpg",
+  avatar: "/images/portfolio-avatar-bw.jpg",
   email: "example@gmail.com",
   location: "Europe/Budapest", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
   languages: ["English", "Spanish"], // optional: Leave the array empty if you don't want to display languages
@@ -53,15 +53,15 @@ const home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>5+ years of experience creating amazing digital products<br/> - I make It happen</>,
+  headline: <>Welcome to my website!<br/>My name is Ernesto 🤙</>,
   featured: {
     display: true,
-    title: <>Current project: <strong className="ml-4">Vodafone Germany Webshop</strong></>,
+    title: <>Currently working on: <strong className="ml-4">Vodafone Germany Webshop 🛒</strong></>,
     href: "/work/german-oneshop",
   },
   subline: (
     <>
-      I am passionate about building projects by blending creativity and technical knowledge
+      I am a frontend developer passionate about crafting projects, tackling challenges and blending my creativity with technical skills
     </>
   ),
 };
@@ -69,7 +69,7 @@ const home = {
 const about = {
   path: "/about",
   label: "About",
-  title: `About – ${person.name}`,
+  title: `More about me 😎`,
   description: `Meet ${person.name}, ${person.role}`,
   tableOfContent: {
     display: true,
