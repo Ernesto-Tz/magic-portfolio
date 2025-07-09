@@ -64,6 +64,8 @@ const home = {
       I am a frontend developer passionate about crafting projects, tackling challenges and blending my creativity with technical skills
     </>
   ),
+  projectsSectionTitle: "Latest Projects",
+  blogSectionTitle: "Recent from the blog",
 };
 
 const about = {

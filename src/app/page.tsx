@@ -78,7 +78,7 @@ export default function Home() {
         </Column>
       </Column>
       <Heading as="h2" variant="display-strong-xs" wrap="balance">
-        Latest Projects
+        {home.projectsSectionTitle}
       </Heading>
       <RevealFx translateY="16" delay={0.6}>
         <Projects range={[1, 2]} />
@@ -87,7 +87,7 @@ export default function Home() {
         <Flex fillWidth gap="24" mobileDirection="column">
           <Flex flex={1} paddingLeft="l" paddingTop="24">
             <Heading as="h2" variant="display-strong-xs" wrap="balance">
-              Recent from the blog
+              {home.blogSectionTitle}
             </Heading>
           </Flex>
           <Flex flex={3} paddingX="20">
