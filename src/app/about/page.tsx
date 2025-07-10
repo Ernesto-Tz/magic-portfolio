@@ -3,9 +3,11 @@ import {
   Button,
   Column,
   Flex,
+  Grid,
   Heading,
   Icon,
   IconButton,
+  Logo,
   SmartImage,
   Tag,
   Text,
@@ -47,7 +49,7 @@ export default function About() {
     {
       title: about.technical.title,
       display: about.technical.display,
-      items: about.technical.skills.map((skill) => skill.title),
+      items: person.skills.map((skill) => skill.title),
     },
   ];
   return (
@@ -144,7 +146,7 @@ export default function About() {
             <Text
               className={styles.textAlign}
               variant="display-default-xs"
-              onBackground="neutral-weak"
+              onBackground="accent-weak"
             >
               {person.role}
             </Text>
@@ -192,7 +194,7 @@ export default function About() {
               <Column fillWidth gap="l" marginBottom="40">
                 {about.work.experiences.map((experience, index) => (
                   <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
-                    <Flex fillWidth horizontal="space-between" vertical="end" marginBottom="4">
+                    <Flex fillWidth horizontal="space-between" vertical="end" marginBottom="4" mobileDirection="column">
                       <Text id={experience.company} variant="heading-strong-l">
                       {experience.role}
                       </Text>
@@ -200,7 +202,7 @@ export default function About() {
                         {experience.timeframe}
                       </Text>
                     </Flex>
-                    <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
+                    <Text variant="heading-default-s" onBackground="accent-weak" marginBottom="m">
                       {experience.company}
                     </Text>
                     <Column as="ul" gap="16">
@@ -254,7 +256,7 @@ export default function About() {
               <Column fillWidth gap="l" marginBottom="40">
                 {about.studies.institutions.map((institution, index) => (
                   <Column key={`${institution.name}-${index}`} fillWidth gap="4">
-                    <Flex fillWidth horizontal="space-between" vertical="end" marginBottom="4">
+                    <Flex fillWidth horizontal="space-between" vertical="end" marginBottom="4" mobileDirection="column">
                       <Text id={institution.name} variant="heading-strong-s">
                         {institution.description}
                       </Text>
@@ -262,7 +264,7 @@ export default function About() {
                           {institution.timeframe}
                         </Text>
                     </Flex>
-                    <Text variant="heading-default-xs" onBackground="neutral-weak">
+                    <Text variant="heading-default-xs" onBackground="accent-weak">
                       {institution.name}
                     </Text>
                   </Column>
@@ -281,42 +283,13 @@ export default function About() {
               >
                 {about.technical.title}
               </Heading>
-              <Column fillWidth gap="l">
-                {about.technical.skills.map((skill, index) => (
-                  <Column key={`${skill}-${index}`} fillWidth gap="4">
-                    <Text variant="heading-strong-l">{skill.title}</Text>
-                    <Text variant="body-default-m" onBackground="neutral-weak">
-                      {skill.description}
-                    </Text>
-                    {skill.images && skill.images.length > 0 && (
-                      <Flex fillWidth paddingTop="m" gap="12" wrap>
-                        {skill.images.map((image, index) => (
-                          <Flex
-                            key={index}
-                            border="neutral-medium"
-                            radius="m"
-                            //@ts-ignore
-                            minWidth={image.width}
-                            //@ts-ignore
-                            height={image.height}
-                          >
-                            <SmartImage
-                              enlarge
-                              radius="m"
-                              //@ts-ignore
-                              sizes={image.width.toString()}
-                              //@ts-ignore
-                              alt={image.alt}
-                              //@ts-ignore
-                              src={image.src}
-                            />
-                          </Flex>
-                        ))}
-                      </Flex>
-                    )}
-                  </Column>
+              <Grid fillWidth gap='16' columns="4" mobileColumns='3' >
+                {person.skills.map((skill, index) => (
+                  <Flex key={`${skill}-${index}`} paddingTop="l" vertical="center" horizontal="center" >
+                    <Logo iconSrc={skill.src} size="xl" wordmark={false} href={skill.href} target="_blank"/>
+                  </Flex>
                 ))}
-              </Column>
+              </Grid>
             </>
           )}
         </Column>
