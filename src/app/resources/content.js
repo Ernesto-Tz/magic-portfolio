@@ -6,9 +6,25 @@ const person = {
   },
   role: "Frontend Developer",
   avatar: "/images/portfolio-avatar-bw.jpg",
-  email: "example@gmail.com",
+  email: "ivan.tzompantzi96@gmail.com",
   location: "Europe/Budapest", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
   languages: ["English", "Spanish"], // optional: Leave the array empty if you don't want to display languages
+  skills: [
+    { title:'TypeScript', src: "/trademark/typescript.svg", href: 'https://www.typescriptlang.org/'},
+    { title:'JavaScript', src: "/trademark/javascript.svg", href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript'},
+    { title:'React', src: "/trademark/react.svg", href: 'https://react.dev/'},
+    { title:'GitHub', src: "/trademark/github-blue.svg", href: 'https://docs.github.com/'},
+    { title:'Nextjs', src: "/trademark/nextjs-fill.svg", href: 'https://nextjs.org/docs'},
+    { title:'Vue', src: "/trademark/vue.svg", href: 'https://v2.vuejs.org/v2/guide/'},
+    { title:'HTML', src: "/trademark/html-5.svg", href: 'https://html.spec.whatwg.org/'},
+    { title:'CSS', src: "/trademark/css-3.svg", href: 'https://developer.mozilla.org/en-US/docs/Web/CSS'},
+    { title:'Docker', src: "/trademark/docker.svg", href: 'https://docs.docker.com/'},
+    { title:'Figma', src: "/trademark/figma.svg", href: 'https://help.figma.com/'},
+    { title:'Contentful', src: "/trademark/contentful.svg",  href: 'https://www.contentful.com/developers/docs/'},
+    { title:'Jest', src: "/trademark/jest.svg", href: 'https://jestjs.io/docs/getting-started'},
+    { title:'Storybook', src: "/trademark/storybook.svg",  href: 'https://storybook.js.org/docs'},
+    { title:'Jira', src: "/trademark/jira.svg",  href: 'https://www.atlassian.com/software/jira/guides/getting-started/introduction#what-is-jira-software'},
+  ]
 };
 
 const newsletter = {
@@ -28,12 +44,12 @@ const social = [
   {
     name: "GitHub",
     icon: "github",
-    link: "https://github.com/once-ui-system/nextjs-starter",
+    link: "https://github.com/Ernesto-Tz",
   },
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/company/once-ui/",
+    link: "https://www.linkedin.com/in/ernesto-tzompantzi-0739a5179/",
   },
   {
     name: "X",
@@ -53,7 +69,7 @@ const home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Welcome to my website!<br/>My name is Ernesto 🤙</>,
+  headline: <>Welcome to my website!<br/>My name is Ernesto,</>,
   featured: {
     display: true,
     title: <>Currently working on: <strong className="ml-4">Vodafone Germany Webshop 🛒</strong></>,
@@ -61,7 +77,7 @@ const home = {
   },
   subline: (
     <>
-      I am a frontend developer passionate about crafting projects, tackling challenges and blending my creativity with technical skills
+      I am a frontend developer passionate about crafting projects, tackling challenges and blending my creativity with technical skills.
     </>
   ),
   projectsSectionTitle: "Latest Projects",
@@ -89,14 +105,12 @@ const about = {
     title: "Introduction",
     description: (
       <>
-        I am a frontend developer based in Europe with extensive experience delivering projects. 
-        Over the past 5 years at an international company, I have collaborated with teams from various 
-        countries, gaining valuable insights into different cultures and workflows.
+        Developer based in Europe with a strong track record of delivering projects for international teams. 
+        Over the past five years, I've worked at a global company, collaborating with teams from all over the world and learning how different cultures and workflows shape great products.
         <br/> 
         <br/> 
-        My adaptability, resilience, curiosity, and commitment to continuous development have enabled me to drive meaningful 
-        results—both in the short term and for long-term project success. I thrive in dynamic environments and am passionate 
-        about creating impactful, user-focused solutions.
+        I'm adaptable, resilient, and always curious—qualities that help me drive real results for both short-term goals and long-term success. 
+        I love working in dynamic environments and am passionate about building user-focused solutions that make a real difference.
       </>
     ),
   },
@@ -110,10 +124,12 @@ const about = {
         role: "Experienced Front-end Developer",
         achievements: [
           <>
-            I’m part of the development team from the German webshop targeting Small and Medium Business clients. Our work ranges from building atomic-level components to supporting the end-to-end digitalization of business processes.
+            I'm part of the development team behind the Vodafone German webshop, where we focus on serving small and medium business clients. 
+            Our projects range from building atomic-level UI components to helping drive the full digitalization of business processes.
           </>,
           <>
-            #2
+            Over the past six months, I’ve been focused on expanding our web application’s contract prolongation process. 
+            Working closely with my team, we launched new features that make it easier for clients to extend their contracts, giving them more options and a fully digital experience.
           </>,
         ],
         images: [],
@@ -124,12 +140,10 @@ const about = {
         role: "Junior Front-end Developer",
         achievements: [
           <>
-           Contributed to the development of a mobile application built with React Native, 
-           tailored for SOHO business clients in the Czech Republic market.
+           For a year and a half, I was part of a squad developing a mobile app with React Native, tailored specifically for SOHO (Small Office, Home Office) business clients in the Czech Republic.
           </>,
           <>
-            Collaborated on the creation of an internal web application (Vue.js), 
-            aimed at simplifying the generation process of digital assets for social media.
+            On my first project, I  worked with the development team of an internal web app using Vue, making it much easier to generate digital assets for social media campaigns.
           </>,
         ],
         images: [],
@@ -140,8 +154,8 @@ const about = {
         role: "Front-end Developer (Internship)",
         achievements: [
           <>
-           Generate a variety of digital assets, such as custom email templates and small websites, 
-           aimed at increasing B2B customer engagement and marketing campaigns.
+           During my internship, I created custom email templates and built small websites to help boost B2B customer engagement and support marketing campaigns. 
+           I worked on projects targeting a range of markets, including Italy, Ireland, the Czech Republic, Hungary, and the UK.
           </>,
         ],
         images: [],
@@ -163,16 +177,12 @@ const about = {
     display: true,
     title: "Technical skills",
     skills: [
-      {
-        title: "Figma",
-        description: <>Able to prototype in Figma with Once UI with unnatural speed.</>,
-        images: [],
-      },
-      {
-        title: "Next.js",
-        description: <>Building next gen apps with Next.js + Once UI + Supabase.</>,
-        images: [],
-      },
+      // This was changed by the skills list on the 'person' const
+      // {
+      //   title: "Figma",
+      //   description: <>Able to prototype in Figma with Once UI with unnatural speed.</>,
+      //   images: [],
+      // },
     ],
   },
 };
