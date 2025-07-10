@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Heading, Flex, Text, Button, Avatar, RevealFx, Column, Badge, Row } from "@/once-ui/components";
+import { Heading, Flex, Text, Button, Avatar, RevealFx, Column, Badge, Row, LogoCloud } from "@/once-ui/components";
 import { Projects } from "@/components/work/Projects";
 
 import { baseURL, routes } from "@/app/resources";
@@ -50,7 +50,7 @@ export default function Home() {
             </Heading>
           </RevealFx>
           <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="32">
-            <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl" align="center">
+            <Text wrap="balance" onBackground="accent-weak" variant="heading-default-xl" align="center">
               {home.subline}
             </Text>
           </RevealFx>
@@ -77,6 +77,15 @@ export default function Home() {
           </RevealFx>
         </Column>
       </Column>
+      <LogoCloud 
+        logos={ person.skills.map((skill) => (
+          { iconSrc: skill.src, size: "xl", wordmark: false, alt: skill.title}
+          ))}
+        columns="6"
+        mobileColumns="3"
+        gap="16"
+        limit={12}
+      />
       <Heading as="h2" variant="display-strong-xs" wrap="balance">
         {home.projectsSectionTitle}
       </Heading>
