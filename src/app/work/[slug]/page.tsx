@@ -104,7 +104,6 @@ export default async function Project({
         </Row>
         <Row gap="16" fillWidth tabletDirection="row" mobileDirection="column">
           {person.skills
-            // Only include skills where 'projects' exists and includes post.slug
             .filter(skill => Array.isArray(skill.projects) && skill.projects.includes(post.slug))
             .map((skill, index) => (
               <Badge
