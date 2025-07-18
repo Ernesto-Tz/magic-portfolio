@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/mdx";
 import { getPosts } from "@/app/utils/utils";
-import { AvatarGroup, Button, Column, Flex, Heading, SmartImage, Text } from "@/once-ui/components";
+import { AvatarGroup, Badge, Button, Column, Flex, Heading, Row, SmartImage, Text } from "@/once-ui/components";
 import { baseURL } from "@/app/resources";
 import { about, person, work } from "@/app/resources/content";
 import { formatDate } from "@/app/utils/formatDate";
@@ -95,6 +95,31 @@ export default async function Project({
           </Text>
         </Flex>
         <CustomMDX source={post.content} />
+      </Column>
+      <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
+        <Row vertical="start">
+          <Heading as="h2" id='technologies-used' variant="display-strong-s" marginBottom="m">
+            Technologies Used
+          </Heading>
+        </Row>
+        <Row gap="16" fillWidth tabletDirection="row" mobileDirection="column">
+          {person.skills
+            // Only include skills where 'projects' exists and includes post.slug
+            .filter(skill => Array.isArray(skill.projects) && skill.projects.includes(post.slug))
+            .map((skill, index) => (
+              <Badge
+                key={`${skill.title}-${index}`}
+                id={`badge-${index}`}
+                title={skill.title}
+                arrow={false}
+                paddingX="12"
+                paddingY="8"
+                onBackground="brand-medium"
+                background="brand-alpha-weak"
+                textVariant="label-default-s"
+              />
+            ))}
+        </Row>
       </Column>
       <ScrollToHash />
     </Column>
