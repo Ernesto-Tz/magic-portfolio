@@ -9,20 +9,21 @@ const person = {
   email: "ivan.tzompantzi96@gmail.com",
   location: "Europe/Budapest", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
   languages: ["English", "Spanish"], // optional: Leave the array empty if you don't want to display languages
-  skills: [
-    { title:'TypeScript', src: "/trademark/typescript.svg", href: 'https://www.typescriptlang.org/'},
+  skills: [ // This will appear on HOME, ABOUT and the projects define in which project description it appears, the project name has to equal its slug
+    { title:'TypeScript', src: "/trademark/typescript.svg", href: 'https://www.typescriptlang.org/', projects: ['german-oneshop','czech-mobile-app']}, 
     { title:'JavaScript', src: "/trademark/javascript.svg", href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript'},
-    { title:'React', src: "/trademark/react.svg", href: 'https://react.dev/'},
-    { title:'GitHub', src: "/trademark/github-blue.svg", href: 'https://docs.github.com/'},
-    { title:'Nextjs', src: "/trademark/nextjs-fill.svg", href: 'https://nextjs.org/docs'},
+    { title:'React', src: "/trademark/react.svg", href: 'https://react.dev/', projects: ['german-oneshop','czech-mobile-app']},
+    { title:'GitHub', src: "/trademark/github-blue.svg", href: 'https://docs.github.com/', projects: ['czech-mobile-app']},
+    { title:'Nextjs', src: "/trademark/nextjs-fill.svg", href: 'https://nextjs.org/docs', projects: ['german-oneshop']},
+    { title:'React Native', src: "/trademark/react-native.svg", href: 'https://reactnative.dev/', projects: ['czech-mobile-app']},
     { title:'Vue', src: "/trademark/vue.svg", href: 'https://v2.vuejs.org/v2/guide/'},
     { title:'HTML', src: "/trademark/html-5.svg", href: 'https://html.spec.whatwg.org/'},
     { title:'CSS', src: "/trademark/css-3.svg", href: 'https://developer.mozilla.org/en-US/docs/Web/CSS'},
-    { title:'Docker', src: "/trademark/docker.svg", href: 'https://docs.docker.com/'},
-    { title:'Figma', src: "/trademark/figma.svg", href: 'https://help.figma.com/'},
-    { title:'Contentful', src: "/trademark/contentful.svg",  href: 'https://www.contentful.com/developers/docs/'},
+    { title:'Docker', src: "/trademark/docker.svg", href: 'https://docs.docker.com/', projects: ['german-oneshop']},
+    { title:'Figma', src: "/trademark/figma.svg", href: 'https://help.figma.com/', projects: ['german-oneshop','czech-mobile-app']},
+    { title:'Contentful', src: "/trademark/contentful.svg",  href: 'https://www.contentful.com/developers/docs/', projects: ['german-oneshop']},
     { title:'Jest', src: "/trademark/jest.svg", href: 'https://jestjs.io/docs/getting-started'},
-    { title:'Storybook', src: "/trademark/storybook.svg",  href: 'https://storybook.js.org/docs'},
+    { title:'Storybook', src: "/trademark/storybook.svg",  href: 'https://storybook.js.org/docs', projects: ['german-oneshop']},
     { title:'Jira', src: "/trademark/jira.svg",  href: 'https://www.atlassian.com/software/jira/guides/getting-started/introduction#what-is-jira-software'},
   ]
 };
