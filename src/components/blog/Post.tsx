@@ -1,8 +1,8 @@
 "use client";
 
-import { Column, Flex, Heading, SmartImage, SmartLink, Tag, Text } from '@/once-ui/components';
+import { Column, Flex, Heading, Media, SmartLink, Tag, Text } from '@once-ui-system/core';
 import styles from './Posts.module.scss';
-import { formatDate } from '@/app/utils/formatDate';
+import { formatDate } from '@/utils/formatDate';
 
 interface PostProps {
     post: any;
@@ -27,7 +27,7 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
                 mobileDirection="column"
                 fillWidth>
                 {post.metadata.image && thumbnail && (
-                    <SmartImage
+                    <Media
                         priority
                         className={styles.image}
                         sizes="(max-width: 768px) 100vw, 640px"

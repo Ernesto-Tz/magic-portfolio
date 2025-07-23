@@ -1,18 +1,27 @@
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import React, { ReactNode } from "react";
-import dynamic from "next/dynamic";
 
 import { 
   Heading,
   HeadingLink,
-  SmartImage,
-  SmartLink,
   Text,
   InlineCode,
-} from "@/once-ui/components";
-import { CodeBlock } from "@/once-ui/modules/code/CodeBlock";
-import { TextProps } from "@/once-ui/interfaces";
-import { SmartImageProps } from "@/once-ui/components/SmartImage";
+  CodeBlock,
+  TextProps,
+  MediaProps,
+  Accordion,
+  AccordionGroup,
+  Table,
+  Feedback,
+  Button,
+  Card,
+  Grid,
+  Row,
+  Column,
+  Icon,
+  Media,
+  SmartLink,
+} from "@once-ui-system/core";
 
 type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
@@ -43,14 +52,14 @@ function CustomLink({ href, children, ...props }: CustomLinkProps) {
   );
 }
 
-function createImage({ alt, src, ...props }: SmartImageProps & { src: string }) {
+function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
   if (!src) {
-    console.error("SmartImage requires a valid 'src' property.");
+    console.error("Media requires a valid 'src' property.");
     return null;
   }
 
   return (
-    <SmartImage
+    <Media
       marginTop="8"
       marginBottom="16"
       enlarge
@@ -75,11 +84,12 @@ function slugify(str: string): string {
 }
 
 function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
-  const CustomHeading = ({ children, ...props }: TextProps<typeof as>) => {
+  const CustomHeading = ({ children, ...props }: Omit<React.ComponentProps<typeof HeadingLink>, 'as' | 'id'>) => {
     const slug = slugify(children as string);
     return (
       <HeadingLink
-        style={{ marginTop: "var(--static-space-24)", marginBottom: "var(--static-space-12)" }}
+        marginTop="24"
+        marginBottom="12"
         as={as}
         id={slug}
         {...props}
@@ -125,7 +135,7 @@ function createCodeBlock(props: any) {
       <CodeBlock
         marginTop="8"
         marginBottom="16"
-        codeInstances={[
+        codes={[
           {
             code: children,
             language,
@@ -157,18 +167,18 @@ const components = {
   Text,
   CodeBlock,
   InlineCode,
-  Accordion: dynamic(() => import("@/once-ui/components").then(mod => mod.Accordion)),
-  AccordionGroup: dynamic(() => import("@/once-ui/components").then(mod => mod.AccordionGroup)),
-  Table: dynamic(() => import("@/once-ui/components").then(mod => mod.Table)),
-  Feedback: dynamic(() => import("@/once-ui/components").then(mod => mod.Feedback)),
-  Button: dynamic(() => import("@/once-ui/components").then(mod => mod.Button)),
-  Card: dynamic(() => import("@/once-ui/components").then(mod => mod.Card)),
-  Grid: dynamic(() => import("@/once-ui/components").then(mod => mod.Grid)),
-  Row: dynamic(() => import("@/once-ui/components").then(mod => mod.Row)),
-  Column: dynamic(() => import("@/once-ui/components").then(mod => mod.Column)),
-  Icon: dynamic(() => import("@/once-ui/components").then(mod => mod.Icon)),
-  SmartImage: dynamic(() => import("@/once-ui/components").then(mod => mod.SmartImage)),
-  SmartLink: dynamic(() => import("@/once-ui/components").then(mod => mod.SmartLink)),
+  Accordion,
+  AccordionGroup,
+  Table,
+  Feedback,
+  Button,
+  Card,
+  Grid,
+  Row,
+  Column,
+  Icon,
+  Media,
+  SmartLink,
 };
 
 type CustomMDXProps = MDXRemoteProps & {
