@@ -81,6 +81,11 @@ const home = {
       I am a frontend developer passionate about crafting projects, tackling challenges and blending my creativity with technical skills.
     </>
   ),
+  contactCta: {
+    title: "Let's connect 🤙",
+    link: `mailto:${person.email}`,
+    icon: "email",
+  },
   projectsSectionTitle: "Latest Projects",
   blogSectionTitle: "Recent from the blog",
 };
