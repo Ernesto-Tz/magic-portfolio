@@ -54,26 +54,38 @@ export default function Home() {
               {home.subline}
             </Text>
           </RevealFx>
-          <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
-            <Button
-              id="about"
-              data-border="rounded"
-              href={about.path}
-              variant="secondary"
-              size="m"
-              arrowIcon
-            >
-              <Flex gap="8" vertical="center">
-                {about.avatar.display && (
-                  <Avatar
-                    style={{ marginLeft: "-0.75rem", marginRight: "0.25rem" }}
-                    src={person.avatar}
-                    size="m"
-                  />
-                )}
-                {about.title}
-              </Flex>
-            </Button>
+          <RevealFx paddingTop="20" delay={0.4} horizontal="center">
+            <Flex paddingBottom="8" gap="20" mobileDirection="column">
+              <Button
+                key="contact"
+                href={home.contactCta.link}
+                prefixIcon={home.contactCta.icon}
+                label={home.contactCta.title}
+                size="m"
+                variant="secondary"
+                data-border="rounded"
+                arrowIcon={true}
+              />
+              <Button
+                id="about"
+                data-border="rounded"
+                href={about.path}
+                variant="secondary"
+                size="m"
+                arrowIcon
+              >
+                <Flex gap="8" vertical="center">
+                  {about.avatar.display && (
+                    <Avatar
+                      style={{ marginLeft: "-0.75rem", marginRight: "0.25rem" }}
+                      src={person.avatar}
+                      size="m"
+                    />
+                  )}
+                  {about.title}
+                </Flex>
+              </Button>
+            </Flex>
           </RevealFx>
         </Column>
       </Column>
