@@ -50,12 +50,12 @@ export default function Home() {
             </Heading>
           </RevealFx>
           <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="32">
-            <Text wrap="balance" onBackground="accent-weak" variant="heading-default-xl" align="center">
+            <Text wrap="balance" onBackground="accent-weak" variant="body-default-xl" align="center">
               {home.subline}
             </Text>
           </RevealFx>
-          <RevealFx paddingTop="20" delay={0.4} horizontal="center">
-            <Flex paddingBottom="8" gap="20" mobileDirection="column">
+          <RevealFx paddingTop="20" delay={0.4}>
+            <Flex paddingBottom="8" gap="20" horizontal="center" mobileDirection="column">
               <Button
                 key="contact"
                 href={home.contactCta.link}
@@ -64,7 +64,7 @@ export default function Home() {
                 size="m"
                 variant="secondary"
                 data-border="rounded"
-                arrowIcon={true}
+                className={"ml-12"}
               />
               <Button
                 id="about"
