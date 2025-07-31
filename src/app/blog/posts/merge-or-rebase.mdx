@@ -1,0 +1,66 @@
+---
+title: "To Rebase or not to Rebase?"
+summary: "Rebase vs Merge on GitHub: Which Should You Choose?"
+image: "/images/blog/merge-or-rebase.jpg"
+publishedAt: "2025-06-23"
+tag: "GitHub"
+---
+
+# Rebase vs Merge on GitHub: Which Should You Choose?
+
+If you’ve ever wondered whether you should click “Rebase” or “Merge” on GitHub, you’re not alone. Both tools are staples in any developer’s workflow, but knowing which to use (and when) can make your project’s history cleaner, collaboration smoother, and code reviews much easier. Let’s break down the practical differences in a way that works for real-life teams and solo devs alike.
+
+## The Key Differences
+
+Here’s a quick look at how rebase and merge stack up:
+
+<Column fillWidth gap="-1" marginBottom="16" marginTop="8">
+  <Table 
+    data={{
+      headers: [
+        { content: "Feature", key: "feature" },
+        { content: "Rebase", key: "rebase" },
+        { content: "Merge", key: "merge" }
+      ],
+      rows: [
+        ["Commit History", "Linear, tidy, no merge commits", "Preserves full branch context, shows merges"],
+        ["Traceability", "Loses some context of feature integration timing", "Shows exactly when and how merges happened"],
+        ["Safety", "Rewrites history, risky if branch is public", "Non-destructive, all history kept"],
+        ["Conflict Resolution", "May need to resolve conflicts step by step", "Resolve all conflicts once per merge"],
+        ["Collaboration", "Best for your local/private branches", "Best for shared/public branches"]
+      ]
+    }}
+  />
+</Column>
+
+## When to Use Merge
+
+* **Collaborative team projects or public branches**: Use merge so everyone sees exactly how and when your branch was combined.
+* **Max traceability**: If your team needs a full, auditable trail of feature integrations, stick with merge.
+* **Risk-free history**: Merge preserves the raw sequence of project events, making it safer for shared workspaces. This is also ideal for teams new to Git.
+
+## When to Use Rebase
+
+* **Solo work or private features**: Perfect when you’re tidying up a branch before you share it—say, right before a pull request.
+* **Clean commit history**: Rebasing gives reviewers a linear, easy-to-understand history.
+* **Interactive cleanup**: Need to squash, edit, or reorder commits? Interactive rebase is your friend.
+* **Streamlined graphs**: If your team prizes a neat commit graph over branch-tracking, rebase is the way to go.
+
+**Warning**: Never rebase a branch that’s already been shared! Doing so can mess up your collaborators’ history and cause annoying merge headaches.
+
+## The Hybrid Approach: Best of Both Worlds
+
+Most modern teams actually combine both:
+
+* **Rebase while your branch is private**: This lets you clean up and create a straight, narrative history.
+* **Merge for integration**: When you’re ready to go public, merge into the main branch to safely preserve context and history.
+
+## Bottom Line
+
+* Use merge when collaborating and preserving complete project history matters.
+* Use rebase for tidying your local commits and preparing for code review.
+* Don’t rebase shared branches to avoid messing up your teammates’ history.
+
+For most, a mixed approach: rebase for tidiness, merge for safety. This delivers the cleanest history and smoothest teamwork. 
+
+Happy committing, and may your histories stay as neat as your code!
