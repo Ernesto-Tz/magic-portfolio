@@ -1,15 +1,10 @@
 "use client";
 
-import {
-  AvatarGroup,
-  Button,
-  Carousel,
-  Column,
-  Flex,
-  Heading,
-  SmartLink,
-  Text,
-} from "@/once-ui/components";
+import Image from "next/image";
+import Link from "next/link";
+import { FileText, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface ProjectCardProps {
   href: string;
@@ -24,6 +19,7 @@ interface ProjectCardProps {
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   href,
+  priority,
   images = [],
   title,
   content,
@@ -32,54 +28,72 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   link,
 }) => {
   return (
-    <Column fillWidth gap="m">
-      <Carousel
-        sizes="(max-width: 960px) 100vw, 960px"
-        images={images.map((image) => ({
-          src: image,
-          alt: title,
-        }))}
-      />
-      <Flex
-        mobileDirection="column"
-        fillWidth
-        paddingX="s"
-        paddingTop="12"
-        paddingBottom="24"
-        gap="l"
-      >
+    <div className="w-full flex flex-col gap-4">
+      {images[0] && (
+        <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-border">
+          <Image
+            src={images[0]}
+            alt={title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 960px) 100vw, 960px"
+            priority={priority}
+          />
+        </div>
+      )}
+      <div className="flex flex-col sm:flex-row gap-6 px-2 py-2">
         {title && (
-          <Flex flex={5}>
-            <Heading as="h2" wrap="balance" variant="heading-strong-xl">
+          <div className="flex-[5]">
+            <h2 className="text-2xl font-bold text-balance font-primary leading-tight">
               {title}
-            </Heading>
-          </Flex>
+            </h2>
+          </div>
         )}
         {(avatars?.length > 0 || description?.trim() || content?.trim()) && (
-          <Column flex={7} gap="16">
-            {avatars?.length > 0 && <AvatarGroup avatars={avatars} size="m" reverse />}
-            {description?.trim() && (
-              <Text wrap="balance" variant="body-default-s" onBackground="accent-weak">
-                {description}
-              </Text>
+          <div className="flex-[7] flex flex-col gap-4">
+            {avatars?.length > 0 && (
+              <div className="flex">
+                {avatars.map((avatar, i) => (
+                  <Avatar
+                    key={i}
+                    className="w-7 h-7 border-2 border-background"
+                    style={{ marginLeft: i > 0 ? "-8px" : "0" }}
+                  >
+                    <AvatarImage src={avatar.src} />
+                    <AvatarFallback>?</AvatarFallback>
+                  </Avatar>
+                ))}
+              </div>
             )}
-            <Flex gap="24" wrap>
+            {description?.trim() && (
+              <p className="text-sm text-primary/70 text-balance leading-relaxed">
+                {description}
+              </p>
+            )}
+            <div className="flex flex-wrap gap-4">
               {content?.trim() && (
-                <Button href={href} variant="secondary" prefixIcon="document">Project experience</Button>
+                <Button asChild variant="outline" size="sm" className="gap-2">
+                  <Link href={href}>
+                    <FileText className="h-3.5 w-3.5" />
+                    Project experience
+                  </Link>
+                </Button>
               )}
               {link && (
-                <SmartLink
-                  suffixIcon="arrowUpRightFromSquare"
-                  style={{ margin: "0", width: "fit-content" }}
+                <Link
                   href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  <Text variant="body-default-s">Check the live project</Text>
-                </SmartLink>
+                  Check the live project
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </Link>
               )}
-            </Flex>
-          </Column>
+            </div>
+          </div>
         )}
-      </Flex>
-    </Column>
+      </div>
+    </div>
   );
 };
