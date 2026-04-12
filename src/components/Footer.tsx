@@ -1,57 +1,58 @@
-import { Flex, IconButton, SmartLink, Text } from "@/once-ui/components";
+import Link from "next/link";
+import { Github, Linkedin, Mail, Twitter } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { person, social } from "@/app/resources/content";
-import styles from "./Footer.module.scss";
+
+const iconMap: Record<string, React.ElementType> = {
+  github: Github,
+  linkedin: Linkedin,
+  email: Mail,
+  x: Twitter,
+};
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Flex
-      as="footer"
-      fillWidth
-      padding="8"
-      horizontal="center"
-      mobileDirection="column"
-    >
-      <Flex
-        className={styles.mobile}
-        maxWidth="m"
-        paddingY="8"
-        paddingX="16"
-        gap="16"
-        horizontal="space-between"
-        vertical="center"
-      >
-        <Text variant="body-default-s" onBackground="neutral-strong">
-          <Text onBackground="neutral-weak">© {currentYear} /</Text>
-          <Text paddingX="4">{person.name}</Text>
-          <Text onBackground="neutral-weak">
-            {/* Usage of this template requires attribution. Please don't remove the link to Once UI. */}
-            / Build your portfolio with{" "}
-            <SmartLink
+    <>
+      {/* Spacer on mobile so content isn't hidden behind fixed bottom nav */}
+      <div className="h-20 sm:hidden" />
+      <footer className="w-full flex justify-center px-2 py-2">
+        <div className="w-full max-w-screen-md flex items-center justify-between px-4 py-2">
+          <p className="text-xs text-muted-foreground">
+            © {currentYear} /{" "}
+            <span className="text-foreground">{person.name}</span>
+            {" "}/ Build your portfolio with{" "}
+            <Link
               href="https://once-ui.com/templates/magic-portfolio"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-foreground transition-colors"
             >
               Once UI
-            </SmartLink>
-          </Text>
-        </Text>
-        <Flex gap="16">
-          {social.map(
-            (item) =>
-              item.link && (
-                <IconButton
+            </Link>
+          </p>
+          <div className="flex gap-1">
+            {social.map((item) => {
+              if (!item.link) return null;
+              const Icon = iconMap[item.icon] ?? Mail;
+              return (
+                <Button
                   key={item.name}
-                  href={item.link}
-                  icon={item.icon}
-                  tooltip={item.name}
-                  size="s"
+                  asChild
                   variant="ghost"
-                />
-              ),
-          )}
-        </Flex>
-      </Flex>
-      <Flex height="80" show="s"></Flex>
-    </Flex>
+                  size="icon"
+                  className="w-7 h-7 text-muted-foreground hover:text-foreground"
+                >
+                  <Link href={item.link} target="_blank" rel="noopener noreferrer" aria-label={item.name}>
+                    <Icon className="h-3.5 w-3.5" />
+                  </Link>
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+      </footer>
+    </>
   );
 };
