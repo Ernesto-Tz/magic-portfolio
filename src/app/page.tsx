@@ -129,25 +129,35 @@ export default function Home() {
       <div className="w-full flex flex-col gap-6">
         <SectionMarker number="02" label="Skills & Tools" />
         <Reveal translateY={8} delay={0.1}>
-          <div className="grid grid-cols-6 sm:grid-cols-6 gap-4">
-            {person.skills.slice(0, 12).map((skill) => (
-              <Link
-                key={skill.title}
-                href={skill.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center p-3 rounded-lg hover:bg-secondary transition-colors"
-                title={skill.title}
-              >
+          <div
+            className="relative overflow-hidden"
+            style={{
+              maskImage: "linear-gradient(90deg, transparent, black 10%, black 90%, transparent)",
+              WebkitMaskImage: "linear-gradient(90deg, transparent, black 10%, black 90%, transparent)",
+            }}
+          >
+            <div
+              className="flex gap-6 w-max"
+              style={{ animation: "marquee 25s linear infinite" }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLDivElement).style.animationPlayState = "paused")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLDivElement).style.animationPlayState = "running")
+              }
+            >
+              {[...person.skills, ...person.skills].map((skill, i) => (
                 <Image
+                  key={`${skill.title}-${i}`}
                   src={skill.src}
                   alt={skill.title}
                   width={32}
                   height={32}
-                  className="w-8 h-8 object-contain"
+                  className="w-8 h-8 object-contain flex-shrink-0 opacity-70 hover:opacity-100 transition-opacity"
+                  title={skill.title}
                 />
-              </Link>
-            ))}
+              ))}
+            </div>
           </div>
         </Reveal>
       </div>
