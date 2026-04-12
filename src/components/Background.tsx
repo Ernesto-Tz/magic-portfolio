@@ -1,29 +1,47 @@
 export function Background() {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true">
-      {/* Radial gradient glow — bottom-left, violet */}
+      {/* Radial green glow — bottom-left */}
       <div
         style={{
           position: "absolute",
-          left: "10%",
-          top: "85%",
-          width: "55%",
-          height: "45%",
-          transform: "translate(-0%, -50%)",
+          left: "-5%",
+          top: "65%",
+          width: "65%",
+          height: "65%",
           background:
-            "radial-gradient(ellipse at center, hsl(263 70% 40% / 0.25) 0%, transparent 70%)",
+            "radial-gradient(ellipse at center, hsl(144 33% 46% / 0.14) 0%, transparent 65%)",
         }}
       />
-      {/* Diagonal lines pattern */}
+      {/* Edge vignette */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          opacity: 0.15,
-          backgroundImage:
-            "repeating-linear-gradient(45deg, hsl(240 5% 65% / 0.3) 0px, hsl(240 5% 65% / 0.3) 1px, transparent 1px, transparent 64px)",
+          boxShadow: "inset 0 0 120px rgba(0,0,0,0.45)",
         }}
       />
+      {/* Film grain */}
+      <svg
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          opacity: 0.035,
+        }}
+      >
+        <filter id="bg-grain">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.8"
+            numOctaves="4"
+            stitchTiles="stitch"
+          />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#bg-grain)" />
+      </svg>
     </div>
   );
 }
