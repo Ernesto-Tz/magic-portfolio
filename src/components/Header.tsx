@@ -2,18 +2,16 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-
-import { Fade, Flex, Line, ToggleButton } from "@/once-ui/components";
-import styles from "@/components/Header.module.scss";
-
+import { Home, User, LayoutGrid, BookOpen } from "lucide-react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import { routes, display } from "@/app/resources";
-import { person, about, blog, work, gallery } from "@/app/resources/content";
+import { person, about, blog, work } from "@/app/resources/content";
 import { ThemeToggle } from "./ThemeToggle";
 
-type TimeDisplayProps = {
-  timeZone: string;
-  locale?: string; // Optionally allow locale, defaulting to 'en-GB'
-};
+type TimeDisplayProps = { timeZone: string; locale?: string };
 
 const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" }) => {
   const [currentTime, setCurrentTime] = useState("");
@@ -28,146 +26,112 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" })
         second: "2-digit",
         hour12: false,
       };
-      const timeString = new Intl.DateTimeFormat(locale, options).format(now);
-      setCurrentTime(timeString);
+      setCurrentTime(new Intl.DateTimeFormat(locale, options).format(now));
     };
-
     updateTime();
-    const intervalId = setInterval(updateTime, 1000);
-
-    return () => clearInterval(intervalId);
+    const id = setInterval(updateTime, 1000);
+    return () => clearInterval(id);
   }, [timeZone, locale]);
 
   return <>{currentTime}</>;
 };
 
-export default TimeDisplay;
+function NavButton({
+  href,
+  selected,
+  icon: Icon,
+  label,
+}: {
+  href: string;
+  selected: boolean;
+  icon: React.ElementType;
+  label: string;
+}) {
+  return (
+    <>
+      {/* Desktop: icon + label */}
+      <Button
+        asChild
+        variant="ghost"
+        size="sm"
+        className={cn(
+          "hidden sm:flex gap-1.5 text-xs font-normal h-8 px-3",
+          selected
+            ? "bg-secondary text-foreground"
+            : "text-muted-foreground hover:text-foreground"
+        )}
+      >
+        <Link href={href}>
+          <Icon className="h-3.5 w-3.5" />
+          {label}
+        </Link>
+      </Button>
+      {/* Mobile: icon only */}
+      <Button
+        asChild
+        variant="ghost"
+        size="icon"
+        className={cn(
+          "sm:hidden w-8 h-8",
+          selected
+            ? "bg-secondary text-foreground"
+            : "text-muted-foreground hover:text-foreground"
+        )}
+      >
+        <Link href={href}>
+          <Icon className="h-4 w-4" />
+        </Link>
+      </Button>
+    </>
+  );
+}
 
 export const Header = () => {
   const pathname = usePathname() ?? "";
 
   return (
     <>
-      <Fade hide="s" fillWidth position="fixed" height="80" zIndex={9} />
-      <Fade show="s" fillWidth position="fixed" bottom="0" to="top" height="80" zIndex={9} />
-      <Flex
-        fitHeight
-        position="unset"
-        className={styles.position}
-        as="header"
-        zIndex={9}
-        fillWidth
-        padding="8"
-        horizontal="center"
-        data-border="rounded"
-      >
-        <Flex paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
-          {display.location && <Flex hide="s">{person.location}</Flex>}
-        </Flex>
-        <Flex fillWidth horizontal="center">
-          <Flex
-            background="surface"
-            border="neutral-alpha-medium"
-            radius="m-4"
-            shadow="l"
-            padding="4"
-            horizontal="center"
-            zIndex={1}
-          >
-            <Flex gap="4" vertical="center" textVariant="body-default-s">
-              {routes["/"] && (
-                <ToggleButton prefixIcon="home" href="/" selected={pathname === "/"} />
-              )}
-              <Line background="neutral-alpha-medium" vert maxHeight="24" />
-              {routes["/about"] && (
-                <>
-                  <ToggleButton
-                    className="s-flex-hide"
-                    prefixIcon="person"
-                    href="/about"
-                    label={about.label}
-                    selected={pathname === "/about"}
-                  />
-                  <ToggleButton
-                    className="s-flex-show"
-                    prefixIcon="person"
-                    href="/about"
-                    selected={pathname === "/about"}
-                  />
-                </>
-              )}
-              {routes["/work"] && (
-                <>
-                  <ToggleButton
-                    className="s-flex-hide"
-                    prefixIcon="grid"
-                    href="/work"
-                    label={work.label}
-                    selected={pathname.startsWith("/work")}
-                  />
-                  <ToggleButton
-                    className="s-flex-show"
-                    prefixIcon="grid"
-                    href="/work"
-                    selected={pathname.startsWith("/work")}
-                  />
-                </>
-              )}
-              {routes["/blog"] && (
-                <>
-                  <ToggleButton
-                    className="s-flex-hide"
-                    prefixIcon="book"
-                    href="/blog"
-                    label={blog.label}
-                    selected={pathname.startsWith("/blog")}
-                  />
-                  <ToggleButton
-                    className="s-flex-show"
-                    prefixIcon="book"
-                    href="/blog"
-                    selected={pathname.startsWith("/blog")}
-                  />
-                </>
-              )}
-              {/* {routes["/gallery"] && (
-                <>
-                  <ToggleButton
-                    className="s-flex-hide"
-                    prefixIcon="gallery"
-                    href="/gallery"
-                    label={gallery.label}
-                    selected={pathname.startsWith("/gallery")}
-                  />
-                  <ToggleButton
-                    className="s-flex-show"
-                    prefixIcon="gallery"
-                    href="/gallery"
-                    selected={pathname.startsWith("/gallery")}
-                  />
-                </>
-              )} */}
-              {display.themeSwitcher && (
-                <>
-                  <Line background="neutral-alpha-medium" vert maxHeight="24" />
-                  <ThemeToggle />
-                </>
-              )}
-            </Flex>
-          </Flex>
-        </Flex>
-        <Flex fillWidth horizontal="end" vertical="center">
-          <Flex
-            paddingRight="12"
-            horizontal="end"
-            vertical="center"
-            textVariant="body-default-s"
-            gap="20"
-          >
-            <Flex hide="s">{display.time && <TimeDisplay timeZone={person.location} />}</Flex>
-          </Flex>
-        </Flex>
-      </Flex>
+      {/* Fade overlay top (hidden on mobile) */}
+      <div className="hidden sm:block fixed top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent z-[9] pointer-events-none" />
+      {/* Fade overlay bottom (mobile only) */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background to-transparent z-[9] pointer-events-none" />
+
+      <header className="sticky top-0 sm:relative z-[9] w-full flex items-center justify-center px-2 py-2">
+        {/* Location — left side, hidden on mobile */}
+        <div className="flex-1 hidden sm:flex pl-3 text-xs text-muted-foreground">
+          {display.location && person.location}
+        </div>
+
+        {/* Pill nav */}
+        <div className="flex items-center bg-card border border-border rounded-[10px] shadow-lg px-1 py-1 gap-1">
+          {routes["/"] && (
+            <NavButton href="/" selected={pathname === "/"} icon={Home} label="Home" />
+          )}
+          <Separator orientation="vertical" className="h-5 mx-0.5" />
+          {routes["/about"] && (
+            <NavButton href="/about" selected={pathname === "/about"} icon={User} label={about.label} />
+          )}
+          {routes["/work"] && (
+            <NavButton href="/work" selected={pathname.startsWith("/work")} icon={LayoutGrid} label={work.label} />
+          )}
+          {routes["/blog"] && (
+            <NavButton href="/blog" selected={pathname.startsWith("/blog")} icon={BookOpen} label={blog.label} />
+          )}
+          {display.themeSwitcher && (
+            <>
+              <Separator orientation="vertical" className="h-5 mx-0.5" />
+              <ThemeToggle />
+            </>
+          )}
+        </div>
+
+        {/* Clock — right side, hidden on mobile */}
+        <div className="flex-1 hidden sm:flex justify-end pr-3 text-xs text-muted-foreground">
+          {display.time && <TimeDisplay timeZone={person.location} />}
+        </div>
+      </header>
     </>
   );
 };
+
+export default TimeDisplay;
