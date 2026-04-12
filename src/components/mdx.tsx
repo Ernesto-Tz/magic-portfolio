@@ -1,174 +1,117 @@
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import React, { ReactNode } from "react";
-import dynamic from "next/dynamic";
-
-import { 
-  Heading,
-  HeadingLink,
-  SmartImage,
-  SmartLink,
-  Text,
-  InlineCode,
-} from "@/once-ui/components";
-import { CodeBlock } from "@/once-ui/modules/code/CodeBlock";
-import { TextProps } from "@/once-ui/interfaces";
-import { SmartImageProps } from "@/once-ui/components/SmartImage";
-
-type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-  href: string;
-  children: ReactNode;
-};
-
-function CustomLink({ href, children, ...props }: CustomLinkProps) {
-  if (href.startsWith("/")) {
-    return (
-      <SmartLink href={href} {...props}>
-        {children}
-      </SmartLink>
-    );
-  }
-
-  if (href.startsWith("#")) {
-    return (
-      <a href={href} {...props}>
-        {children}
-      </a>
-    );
-  }
-
-  return (
-    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
-      {children}
-    </a>
-  );
-}
-
-function createImage({ alt, src, ...props }: SmartImageProps & { src: string }) {
-  if (!src) {
-    console.error("SmartImage requires a valid 'src' property.");
-    return null;
-  }
-
-  return (
-    <SmartImage
-      marginTop="8"
-      marginBottom="16"
-      enlarge
-      radius="m"
-      aspectRatio="16 / 9"
-      border="neutral-alpha-medium"
-      sizes="(max-width: 960px) 100vw, 960px"
-      alt={alt}
-      src={src}
-      {...props}
-    />
-  );
-}
+import Image from "next/image";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 function slugify(str: string): string {
-  return str
+  return String(str)
     .toLowerCase()
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/&/g, "-and-") // Replace & with 'and'
-    .replace(/[^\w\-]+/g, "") // Remove all non-word characters except for -
-    .replace(/\-\-+/g, "-"); // Replace multiple - with single -
+    .replace(/\s+/g, "-")
+    .replace(/&/g, "-and-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-");
 }
 
-function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
-  const CustomHeading = ({ children, ...props }: TextProps<typeof as>) => {
-    const slug = slugify(children as string);
-    return (
-      <HeadingLink
-        style={{ marginTop: "var(--static-space-24)", marginBottom: "var(--static-space-12)" }}
-        as={as}
-        id={slug}
-        {...props}
-      >
-        {children}
-      </HeadingLink>
-    );
+function createHeading(level: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
+  const sizeMap: Record<string, string> = {
+    h1: "text-3xl font-bold mt-8 mb-4 font-primary",
+    h2: "text-2xl font-bold mt-8 mb-3 font-primary",
+    h3: "text-xl font-semibold mt-6 mb-2 font-primary",
+    h4: "text-lg font-semibold mt-4 mb-2",
+    h5: "text-base font-semibold mt-4 mb-2",
+    h6: "text-sm font-semibold mt-4 mb-2",
   };
 
-  CustomHeading.displayName = `${as}`;
-
-  return CustomHeading;
+  const Heading = ({ children, ...props }: { children: ReactNode }) => {
+    const slug = slugify(children as string);
+    const Tag = level;
+    return (
+      <Tag id={slug} className={cn(sizeMap[level], "group flex items-center gap-2")} {...props}>
+        {children}
+        <a
+          href={`#${slug}`}
+          className="opacity-0 group-hover:opacity-50 transition-opacity text-muted-foreground text-sm"
+          aria-hidden="true"
+        >
+          #
+        </a>
+      </Tag>
+    );
+  };
+  Heading.displayName = level;
+  return Heading;
 }
 
-function createParagraph({ children }: TextProps) {
+function CustomLink({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; children: ReactNode }) {
+  if (href.startsWith("/")) {
+    return <Link href={href} className="text-primary underline underline-offset-4 hover:text-primary/80" {...props}>{children}</Link>;
+  }
+  if (href.startsWith("#")) {
+    return <a href={href} {...props}>{children}</a>;
+  }
+  return <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-4 hover:text-primary/80" {...props}>{children}</a>;
+}
+
+function CustomImage({ alt, src, ...props }: { alt?: string; src: string } & Record<string, unknown>) {
+  if (!src) return null;
   return (
-    <Text
-      style={{ lineHeight: "175%" }}
-      variant="body-default-m"
-      onBackground="neutral-strong"
-      marginTop="8"
-      marginBottom="12"
-    >
-      {children}
-    </Text>
+    <div className="relative w-full aspect-video my-6 rounded-xl overflow-hidden border border-border">
+      <Image
+        src={src}
+        alt={alt ?? ""}
+        fill
+        sizes="(max-width: 960px) 100vw, 960px"
+        className="object-cover"
+      />
+    </div>
   );
 }
 
-function createInlineCode({ children }: { children: ReactNode }) {
-  return <InlineCode>{children}</InlineCode>;
+function CustomParagraph({ children }: { children: ReactNode }) {
+  return (
+    <p className="text-base leading-[175%] text-foreground/90 mt-2 mb-3">
+      {children}
+    </p>
+  );
 }
 
-function createCodeBlock(props: any) {
-  // For pre tags that contain code blocks
-  if (props.children && props.children.props && props.children.props.className) {
-    const { className, children } = props.children.props;
-    
-    // Extract language from className (format: language-xxx)
-    const language = className.replace('language-', '');
-    const label = language.charAt(0).toUpperCase() + language.slice(1);
-    
-    return (
-      <CodeBlock
-        marginTop="8"
-        marginBottom="16"
-        codeInstances={[
-          {
-            code: children,
-            language,
-            label
-          }
-        ]}
-        copyButton={true}
-      />
-    );
-  }
-  
-  // Fallback for other pre tags or empty code blocks
-  return <pre {...props} />;
+function CustomInlineCode({ children }: { children: ReactNode }) {
+  return (
+    <code className="bg-secondary text-foreground px-1.5 py-0.5 rounded text-sm font-code">
+      {children}
+    </code>
+  );
+}
+
+function CustomPre(props: React.HTMLAttributes<HTMLPreElement>) {
+  const child = props.children as React.ReactElement<{ className?: string; children?: string }>;
+  const language = child?.props?.className?.replace("language-", "") ?? "text";
+
+  return (
+    <div className="relative my-4 rounded-xl overflow-hidden border border-border bg-card">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-secondary/50">
+        <span className="text-xs text-muted-foreground font-code uppercase tracking-wider">
+          {language}
+        </span>
+      </div>
+      <pre className="overflow-x-auto p-4 text-sm font-code leading-relaxed" {...props} />
+    </div>
+  );
 }
 
 const components = {
-  p: createParagraph as any,
+  p: CustomParagraph as any,
   h1: createHeading("h1") as any,
   h2: createHeading("h2") as any,
   h3: createHeading("h3") as any,
   h4: createHeading("h4") as any,
   h5: createHeading("h5") as any,
   h6: createHeading("h6") as any,
-  img: createImage as any,
+  img: CustomImage as any,
   a: CustomLink as any,
-  code: createInlineCode as any,
-  pre: createCodeBlock as any,
-  Heading,
-  Text,
-  CodeBlock,
-  InlineCode,
-  Accordion: dynamic(() => import("@/once-ui/components").then(mod => mod.Accordion)),
-  AccordionGroup: dynamic(() => import("@/once-ui/components").then(mod => mod.AccordionGroup)),
-  Table: dynamic(() => import("@/once-ui/components").then(mod => mod.Table)),
-  Feedback: dynamic(() => import("@/once-ui/components").then(mod => mod.Feedback)),
-  Button: dynamic(() => import("@/once-ui/components").then(mod => mod.Button)),
-  Card: dynamic(() => import("@/once-ui/components").then(mod => mod.Card)),
-  Grid: dynamic(() => import("@/once-ui/components").then(mod => mod.Grid)),
-  Row: dynamic(() => import("@/once-ui/components").then(mod => mod.Row)),
-  Column: dynamic(() => import("@/once-ui/components").then(mod => mod.Column)),
-  Icon: dynamic(() => import("@/once-ui/components").then(mod => mod.Icon)),
-  SmartImage: dynamic(() => import("@/once-ui/components").then(mod => mod.SmartImage)),
-  SmartLink: dynamic(() => import("@/once-ui/components").then(mod => mod.SmartLink)),
+  code: CustomInlineCode as any,
+  pre: CustomPre as any,
 };
 
 type CustomMDXProps = MDXRemoteProps & {
