@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Globe, Github, Linkedin, Mail, Twitter } from "lucide-react";
+import { Globe, Mail } from "lucide-react";
+import { FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,10 +13,10 @@ import { Metadata } from "next";
 import React from "react";
 
 const iconMap: Record<string, React.ElementType> = {
-  github: Github,
-  linkedin: Linkedin,
+  github: FaGithub,
+  linkedin: FaLinkedin,
   email: Mail,
-  x: Twitter,
+  x: FaXTwitter,
 };
 
 export const metadata: Metadata = {
@@ -177,7 +178,7 @@ export default function About() {
                 {about.studies.title}
               </h2>
               <div className="flex flex-col gap-6 mb-10">
-                {about.studies.institutions.map((inst: { name: string; description: string; timeframe: string }, i: number) => (
+                {about.studies.institutions.map((inst: { name: string; description: React.ReactNode; timeframe: string }, i: number) => (
                   <div key={`${inst.name}-${i}`} className="flex flex-col gap-1">
                     <div className="flex justify-between items-end flex-wrap gap-1">
                       <span id={inst.name} className="text-base font-semibold">
