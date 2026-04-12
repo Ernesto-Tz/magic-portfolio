@@ -15,17 +15,17 @@ const protectedRoutes = {
   "/work/automate-design-handovers-with-a-figma-to-code-pipeline": true,
 };
 
-import { Lora } from "next/font/google";
-import { Playfair_Display } from "next/font/google";
+import { Fraunces } from "next/font/google";
+import { Instrument_Sans } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
 
-const primaryFont = Lora({
+const primaryFont = Fraunces({
   variable: "--font-primary",
   subsets: ["latin"],
   display: "swap",
 });
 
-const secondaryFont = Playfair_Display({
+const secondaryFont = Instrument_Sans({
   variable: "--font-secondary",
   subsets: ["latin"],
   display: "swap",
@@ -89,7 +89,7 @@ const effects = {
     height: "0.25rem",
   },
   lines: {
-    display: true,
+    display: false,
     opacity: 15,
     color: "neutral-alpha-weak",
     size: "64",
