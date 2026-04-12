@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Reveal } from "@/components/Reveal";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
+import { SkillsMarquee } from "@/components/SkillsMarquee";
 import { JsonLd } from "@/components/JsonLd";
 import { baseURL, routes } from "@/app/resources";
 import { home, about, person, newsletter } from "@/app/resources/content";
@@ -129,36 +129,7 @@ export default function Home() {
       <div className="w-full flex flex-col gap-6">
         <SectionMarker number="02" label="Skills & Tools" />
         <Reveal translateY={8} delay={0.1}>
-          <div
-            className="relative overflow-hidden"
-            style={{
-              maskImage: "linear-gradient(90deg, transparent, black 10%, black 90%, transparent)",
-              WebkitMaskImage: "linear-gradient(90deg, transparent, black 10%, black 90%, transparent)",
-            }}
-          >
-            <div
-              className="flex gap-6 w-max"
-              style={{ animation: "marquee 25s linear infinite" }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLDivElement).style.animationPlayState = "paused")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLDivElement).style.animationPlayState = "running")
-              }
-            >
-              {[...person.skills, ...person.skills].map((skill, i) => (
-                <Image
-                  key={`${skill.title}-${i}`}
-                  src={skill.src}
-                  alt={skill.title}
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 object-contain flex-shrink-0 opacity-70 hover:opacity-100 transition-opacity"
-                  title={skill.title}
-                />
-              ))}
-            </div>
-          </div>
+          <SkillsMarquee skills={person.skills} />
         </Reveal>
       </div>
 
