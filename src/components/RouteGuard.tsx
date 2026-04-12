@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { routes, protectedRoutes } from "@/app/resources";
-import { Flex, Spinner, Button, Heading, Column, PasswordInput } from "@/once-ui/components";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
 import NotFound from "@/app/not-found";
 
 interface RouteGuardProps {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
@@ -28,18 +30,11 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
       const checkRouteEnabled = () => {
         if (!pathname) return false;
-
-        if (pathname in routes) {
-          return routes[pathname as keyof typeof routes];
-        }
-
+        if (pathname in routes) return routes[pathname as keyof typeof routes];
         const dynamicRoutes = ["/blog", "/work"] as const;
         for (const route of dynamicRoutes) {
-          if (pathname?.startsWith(route) && routes[route]) {
-            return true;
-          }
+          if (pathname?.startsWith(route) && routes[route]) return true;
         }
-
         return false;
       };
 
@@ -48,11 +43,8 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
       if (protectedRoutes[pathname as keyof typeof protectedRoutes]) {
         setIsPasswordRequired(true);
-
         const response = await fetch("/api/check-auth");
-        if (response.ok) {
-          setIsAuthenticated(true);
-        }
+        if (response.ok) setIsAuthenticated(true);
       }
 
       setLoading(false);
@@ -67,7 +59,6 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password }),
     });
-
     if (response.ok) {
       setIsAuthenticated(true);
       setError(undefined);
@@ -78,33 +69,35 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
   if (loading) {
     return (
-      <Flex fillWidth paddingY="128" horizontal="center">
-        <Spinner />
-      </Flex>
+      <div className="flex w-full justify-center py-32">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
     );
   }
 
-  if (!isRouteEnabled) {
-		return <NotFound />;
-	}
+  if (!isRouteEnabled) return <NotFound />;
 
   if (isPasswordRequired && !isAuthenticated) {
     return (
-      <Column paddingY="128" maxWidth={24} gap="24" center>
-        <Heading align="center" wrap="balance">
+      <div className="flex flex-col items-center justify-center py-32 max-w-xs mx-auto gap-6">
+        <h2 className="text-xl font-semibold text-center text-balance font-primary">
           This page is password protected
-        </Heading>
-        <Column fillWidth gap="8" horizontal="center">
-          <PasswordInput
+        </h2>
+        <div className="flex flex-col w-full gap-2">
+          <Input
             id="password"
-            label="Password"
+            type="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            errorMessage={error}
+            onKeyDown={(e) => e.key === "Enter" && handlePasswordSubmit()}
           />
-          <Button onClick={handlePasswordSubmit}>Submit</Button>
-        </Column>
-      </Column>
+          {error && <p className="text-xs text-destructive">{error}</p>}
+          <Button onClick={handlePasswordSubmit} className="w-full">
+            Submit
+          </Button>
+        </div>
+      </div>
     );
   }
 
