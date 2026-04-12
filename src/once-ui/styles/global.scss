@@ -87,6 +87,25 @@ a:not(.button) {
     }
 }
 
+/* ── EDITORIAL TYPOGRAPHY REFINEMENTS ─────────────── */
+[data-theme="dark"] {
+    /* Tighter tracking on display/heading text for refined editorial feel */
+    h1, h2, h3 {
+        letter-spacing: -0.025em;
+    }
+
+    /* Warm amber glow on text selection */
+    ::selection {
+        background: var(--brand-background-strong);
+        color: var(--brand-on-background-strong);
+    }
+}
+
+/* Lora serif body — increase line-height slightly for readability */
+body {
+    font-feature-settings: "kern" 1, "liga" 1, "onum" 1;
+}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar {
     background: var(--static-transparent);

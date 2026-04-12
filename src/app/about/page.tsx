@@ -19,6 +19,39 @@ import { person, about, social } from "@/app/resources/content";
 import React from "react";
 import { Meta, Schema } from "@/once-ui/modules";
 
+function SectionDivider({ number, label }: { number: string; label: string }) {
+  return (
+    <Flex gap="12" vertical="center" fillWidth style={{ marginBottom: "1.5rem" }}>
+      <span
+        style={{
+          fontFamily: "var(--font-code)",
+          fontSize: "0.65rem",
+          letterSpacing: "0.25em",
+          color: "var(--brand-on-background-weak)",
+          opacity: 0.7,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {number}
+      </span>
+      <span
+        style={{
+          fontFamily: "var(--font-code)",
+          fontSize: "0.65rem",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase" as const,
+          color: "var(--neutral-on-background-weak)",
+          opacity: 0.5,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {label}
+      </span>
+      <div style={{ flex: 1, height: "1px", background: "var(--neutral-alpha-weak)" }} />
+    </Flex>
+  );
+}
+
 export async function generateMetadata() {
   return Meta.generate({
     title: about.title,
@@ -181,13 +214,17 @@ export default function About() {
           </Column>
 
           {about.intro.display && (
-            <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
-              {about.intro.description}
-            </Column>
+            <>
+              <SectionDivider number="01" label={about.intro.title} />
+              <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
+                {about.intro.description}
+              </Column>
+            </>
           )}
 
           {about.work.display && (
             <>
+              <SectionDivider number="02" label={about.work.title} />
               <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
                 {about.work.title}
               </Heading>
@@ -250,6 +287,7 @@ export default function About() {
 
           {about.studies.display && (
             <>
+              <SectionDivider number="03" label={about.studies.title} />
               <Heading as="h2" id={about.studies.title} variant="display-strong-s" marginBottom="m">
                 {about.studies.title}
               </Heading>
@@ -275,6 +313,7 @@ export default function About() {
 
           {about.technical.display && (
             <>
+              <SectionDivider number="04" label={about.technical.title} />
               <Heading
                 as="h2"
                 id={about.technical.title}
