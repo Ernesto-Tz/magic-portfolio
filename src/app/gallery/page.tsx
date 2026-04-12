@@ -1,28 +1,29 @@
-import { Flex } from "@/once-ui/components";
 import MasonryGrid from "@/components/gallery/MasonryGrid";
 import { baseURL } from "@/app/resources";
 import { gallery, person } from "@/app/resources/content";
-import { Meta, Schema } from "@/once-ui/modules";
+import { JsonLd } from "@/components/JsonLd";
+import { Metadata } from "next";
 
-export async function generateMetadata() {
-  return Meta.generate({
+export const metadata: Metadata = {
+  title: gallery.title,
+  description: gallery.description,
+  openGraph: {
     title: gallery.title,
     description: gallery.description,
-    baseURL: baseURL,
-    image: `${baseURL}/og?title=${encodeURIComponent(gallery.title)}`,
-    path: gallery.path,
-  });
-}
+    url: `${baseURL}${gallery.path}`,
+    images: [`${baseURL}/og?title=${encodeURIComponent(gallery.title)}`],
+  },
+};
 
 export default function Gallery() {
   return (
-    <Flex maxWidth="l">
-      <Schema
-        as="webPage"
+    <div className="w-full max-w-screen-lg">
+      <JsonLd
+        type="WebPage"
         baseURL={baseURL}
+        path={gallery.path}
         title={gallery.title}
         description={gallery.description}
-        path={gallery.path}
         image={`${baseURL}/og?title=${encodeURIComponent(gallery.title)}`}
         author={{
           name: person.name,
@@ -31,6 +32,6 @@ export default function Gallery() {
         }}
       />
       <MasonryGrid />
-    </Flex>
+    </div>
   );
 }
