@@ -1,8 +1,7 @@
 "use client";
 
 import Masonry from "react-masonry-css";
-import { SmartImage } from "@/once-ui/components";
-import styles from "./Gallery.module.scss";
+import Image from "next/image";
 import { gallery } from "@/app/resources/content";
 
 export default function MasonryGrid() {
@@ -14,20 +13,24 @@ export default function MasonryGrid() {
   return (
     <Masonry
       breakpointCols={breakpointColumnsObj}
-      className={styles.masonryGrid}
-      columnClassName={styles.masonryGridColumn}
+      className="flex w-auto -ml-4"
+      columnClassName="pl-4 bg-clip-padding"
     >
-      {gallery.images.map((image, index) => (
-        <SmartImage
-          priority={index < 10}
-          sizes="(max-width: 560px) 100vw, 50vw"
+      {gallery.images.map((image: { src: string; alt: string; orientation: string }, index: number) => (
+        <div
           key={index}
-          radius="m"
-          aspectRatio={image.orientation === "horizontal" ? "16 / 9" : "3 / 4"}
-          src={image.src}
-          alt={image.alt}
-          className={styles.gridItem}
-        />
+          className="relative mb-4 rounded-xl overflow-hidden border border-border"
+          style={{ aspectRatio: image.orientation === "horizontal" ? "16 / 9" : "3 / 4" }}
+        >
+          <Image
+            priority={index < 10}
+            src={image.src}
+            alt={image.alt}
+            fill
+            sizes="(max-width: 560px) 100vw, 50vw"
+            className="object-cover"
+          />
+        </div>
       ))}
     </Masonry>
   );
