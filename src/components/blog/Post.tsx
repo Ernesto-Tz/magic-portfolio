@@ -1,68 +1,55 @@
 "use client";
 
-import { Column, Flex, Heading, SmartImage, SmartLink, Tag, Text } from '@/once-ui/components';
-import styles from './Posts.module.scss';
-import { formatDate } from '@/app/utils/formatDate';
+import Link from "next/link";
+import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+import { formatDate } from "@/app/utils/formatDate";
+import { cn } from "@/lib/utils";
 
 interface PostProps {
-    post: any;
-    thumbnail: boolean;
-    direction?: "row" | "column";
+  post: any;
+  thumbnail: boolean;
+  direction?: "row" | "column";
 }
 
 export default function Post({ post, thumbnail, direction }: PostProps) {
-    return (
-        <SmartLink
-            fillWidth
-            unstyled
-            style={{ borderRadius: 'var(--radius-l)' }}
-            key={post.slug}
-            href={`/blog/${post.slug}`}>
-            <Flex
-                position="relative"
-                transition="micro-medium"
-                direction={direction}
-                radius="l"
-                className={styles.hover}
-                mobileDirection="column"
-                fillWidth>
-                {post.metadata.image && thumbnail && (
-                    <SmartImage
-                        priority
-                        className={styles.image}
-                        sizes="(max-width: 768px) 100vw, 640px"
-                        border="neutral-alpha-weak"
-                        cursor="interactive"
-                        radius="l"
-                        src={post.metadata.image}
-                        alt={'Thumbnail of ' + post.metadata.title}
-                        aspectRatio="16 / 9"
-                    />
-                )}
-                <Column
-                    position="relative"
-                    fillWidth gap="4"
-                    padding="24"
-                    vertical="center">
-                    <Heading
-                        as="h2"
-                        variant="heading-strong-l"
-                        wrap="balance">
-                        {post.metadata.title}
-                    </Heading>
-                    <Text
-                        variant="label-default-s"
-                        onBackground="neutral-weak">
-                        {formatDate(post.metadata.publishedAt, false)}
-                    </Text>
-                    { post.metadata.tag &&
-                        <Tag
-                            className="mt-12"
-                            label={post.metadata.tag}
-                            variant="neutral" />
-                    }
-                </Column>
-            </Flex>
-        </SmartLink>
-    );
+  return (
+    <Link
+      href={`/blog/${post.slug}`}
+      className="group block w-full rounded-xl border border-border hover:border-border/80 hover:bg-secondary/40 transition-all duration-200"
+    >
+      <div
+        className={cn(
+          "relative flex",
+          direction === "row" ? "flex-row" : "flex-col"
+        )}
+      >
+        {post.metadata.image && thumbnail && (
+          <div className="relative w-full aspect-video rounded-t-xl overflow-hidden">
+            <Image
+              src={post.metadata.image}
+              alt={"Thumbnail of " + post.metadata.title}
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 640px"
+              className="object-cover"
+            />
+          </div>
+        )}
+        <div className="flex flex-col gap-1 p-5">
+          <h2 className="text-base font-semibold text-balance leading-snug group-hover:text-primary transition-colors font-primary">
+            {post.metadata.title}
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            {formatDate(post.metadata.publishedAt, false)}
+          </p>
+          {post.metadata.tag && (
+            <Badge variant="secondary" className="w-fit mt-2 text-xs">
+              {post.metadata.tag}
+            </Badge>
+          )}
+        </div>
+      </div>
+    </Link>
+  );
 }
