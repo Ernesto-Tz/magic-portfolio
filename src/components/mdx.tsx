@@ -100,6 +100,45 @@ function CustomPre(props: React.HTMLAttributes<HTMLPreElement>) {
   );
 }
 
+// Compatibility wrappers for Once-UI components used directly in MDX posts
+function Column({ children, className, ...props }: { children: ReactNode; className?: string; [key: string]: unknown }) {
+  return <div className={cn("flex flex-col", className as string | undefined)} {...(props as any)}>{children}</div>;
+}
+
+function Row({ children, className, ...props }: { children: ReactNode; className?: string; [key: string]: unknown }) {
+  return <div className={cn("flex flex-row flex-wrap gap-2", className as string | undefined)} {...(props as any)}>{children}</div>;
+}
+
+function Table({ data }: { data?: { headers: { content: string; key: string }[]; rows: string[][] } }) {
+  if (!data) return null;
+  return (
+    <div className="overflow-x-auto my-4">
+      <table className="w-full text-sm border-collapse">
+        <thead>
+          <tr>
+            {data.headers.map((h) => (
+              <th key={h.key} className="border border-border px-3 py-2 text-left font-semibold bg-secondary/50">
+                {h.content}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.rows.map((row, i) => (
+            <tr key={i} className="even:bg-secondary/20">
+              {row.map((cell, j) => (
+                <td key={j} className="border border-border px-3 py-2">
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 const components = {
   p: CustomParagraph as any,
   h1: createHeading("h1") as any,
@@ -112,6 +151,10 @@ const components = {
   a: CustomLink as any,
   code: CustomInlineCode as any,
   pre: CustomPre as any,
+  // Once-UI MDX component compatibility
+  Column: Column as any,
+  Row: Row as any,
+  Table: Table as any,
 };
 
 type CustomMDXProps = MDXRemoteProps & {
