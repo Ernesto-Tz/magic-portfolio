@@ -25,11 +25,11 @@ export const metadata: Metadata = {
 function SectionMarker({ number, label }: { number: string; label?: string }) {
   return (
     <div className="flex items-center gap-3 mb-2">
-      <span className="font-code text-[0.65rem] tracking-[0.25em] text-primary/70 whitespace-nowrap">
+      <span className="font-code text-[0.65rem] tracking-[0.25em] text-primary whitespace-nowrap">
         {number}
       </span>
       {label && (
-        <span className="font-code text-[0.65rem] tracking-[0.2em] uppercase text-muted-foreground/50 whitespace-nowrap">
+        <span className="font-code text-[0.65rem] tracking-[0.2em] uppercase text-muted-foreground/40 whitespace-nowrap">
           {label}
         </span>
       )}
@@ -60,23 +60,27 @@ export default function Home() {
         <SectionMarker number="01" label="Introduction" />
 
         <Reveal translateY={4}>
+          <p className="font-code text-[0.58rem] tracking-[0.22em] uppercase text-accent mb-3">
+            {person.role}
+          </p>
           <h1
-            className="text-4xl sm:text-5xl font-bold tracking-[-0.03em] text-balance font-primary"
-            style={{ lineHeight: "1.05" }}
+            className="text-5xl sm:text-6xl tracking-[-0.025em] text-balance font-primary"
+            style={{ lineHeight: "1.0" }}
           >
-            {home.headline}
+            <span style={{ fontWeight: 700 }}>Hello, I&apos;m </span>
+            <em style={{ fontStyle: "italic", fontWeight: 300, color: "hsl(var(--primary))" }}>Ernesto</em>
           </h1>
         </Reveal>
 
         <Reveal translateY={8} delay={0.2}>
-          <p className="text-lg text-primary/70 max-w-[48ch] leading-relaxed text-balance">
+          <p className="text-base text-muted-foreground max-w-[48ch] leading-relaxed text-balance">
             {home.subline}
           </p>
         </Reveal>
 
         <Reveal delay={0.4}>
           <div className="flex flex-wrap gap-3 pt-2">
-            <Button asChild variant="outline" className="rounded-full gap-2">
+            <Button asChild className="rounded-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
               <Link href={home.contactCta.link}>
                 <Mail className="h-4 w-4" />
                 {home.contactCta.title}
@@ -95,6 +99,30 @@ export default function Home() {
             </Button>
           </div>
         </Reveal>
+
+        {home.featured.display && (
+          <Reveal delay={0.5}>
+            <Link
+              href={home.featured.href}
+              className="flex items-center gap-3 w-full bg-card border border-border rounded-md px-4 py-3 hover:bg-secondary transition-colors group"
+              style={{ borderLeftWidth: "2px", borderLeftColor: "hsl(var(--accent))" }}
+            >
+              <span
+                className="w-2 h-2 rounded-full flex-shrink-0"
+                style={{
+                  background: "hsl(var(--accent))",
+                  boxShadow: "0 0 6px hsl(var(--accent) / 0.6)",
+                }}
+              />
+              <span className="font-code text-[0.55rem] tracking-[0.08em] text-muted-foreground">
+                {home.featured.title}
+              </span>
+              <span className="ml-auto text-muted-foreground/40 group-hover:text-muted-foreground transition-colors text-xs">
+                →
+              </span>
+            </Link>
+          </Reveal>
+        )}
       </div>
 
       {/* 02 · SKILLS */}
