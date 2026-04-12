@@ -1,84 +1,48 @@
-import React from "react";
-
-import {
-  Heading,
-  Flex,
-  Text,
-  Button,
-  Avatar,
-  RevealFx,
-  Column,
-  Row,
-  LogoCloud,
-} from "@/once-ui/components";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Reveal } from "@/components/Reveal";
 import { Projects } from "@/components/work/Projects";
-
+import { Posts } from "@/components/blog/Posts";
+import { JsonLd } from "@/components/JsonLd";
 import { baseURL, routes } from "@/app/resources";
 import { home, about, person, newsletter } from "@/app/resources/content";
-import { Mailchimp } from "@/components";
-import { Posts } from "@/components/blog/Posts";
-import { Meta, Schema } from "@/once-ui/modules";
+import { Metadata } from "next";
+import { Mail } from "lucide-react";
 
-export async function generateMetadata() {
-  return Meta.generate({
+export const metadata: Metadata = {
+  title: home.title,
+  description: home.description,
+  openGraph: {
     title: home.title,
     description: home.description,
-    baseURL: baseURL,
-    path: home.path,
-  });
-}
+    url: `${baseURL}${home.path}`,
+    images: [home.image],
+  },
+};
 
-interface SectionMarkerProps {
-  number: string;
-  label?: string;
-}
-
-function SectionMarker({ number, label }: SectionMarkerProps) {
+function SectionMarker({ number, label }: { number: string; label?: string }) {
   return (
-    <Flex gap="12" vertical="center" fillWidth style={{ marginBottom: "0.5rem" }}>
-      <span
-        style={{
-          fontFamily: "var(--font-code)",
-          fontSize: "0.65rem",
-          letterSpacing: "0.25em",
-          color: "var(--brand-on-background-weak)",
-          opacity: 0.7,
-          whiteSpace: "nowrap",
-        }}
-      >
+    <div className="flex items-center gap-3 mb-2">
+      <span className="font-code text-[0.65rem] tracking-[0.25em] text-primary/70 whitespace-nowrap">
         {number}
       </span>
       {label && (
-        <span
-          style={{
-            fontFamily: "var(--font-code)",
-            fontSize: "0.65rem",
-            letterSpacing: "0.2em",
-            textTransform: "uppercase" as const,
-            color: "var(--neutral-on-background-weak)",
-            opacity: 0.5,
-            whiteSpace: "nowrap",
-          }}
-        >
+        <span className="font-code text-[0.65rem] tracking-[0.2em] uppercase text-muted-foreground/50 whitespace-nowrap">
           {label}
         </span>
       )}
-      <div
-        style={{
-          flex: 1,
-          height: "1px",
-          background: "var(--neutral-alpha-weak)",
-        }}
-      />
-    </Flex>
+      <div className="flex-1 h-px bg-border" />
+    </div>
   );
 }
 
 export default function Home() {
   return (
-    <Column maxWidth="m" gap="80" horizontal="center" style={{ paddingBottom: "var(--static-space-80)" }}>
-      <Schema
-        as="webPage"
+    <div className="w-full max-w-screen-md flex flex-col gap-20 items-center pb-20">
+      <JsonLd
+        type="WebPage"
         baseURL={baseURL}
         path={home.path}
         title={home.title}
@@ -91,101 +55,90 @@ export default function Home() {
         }}
       />
 
-      {/* ── 01 · HERO ──────────────────────────────────────── */}
-      <Column fillWidth paddingTop="xl" gap="l">
+      {/* 01 · HERO */}
+      <div className="w-full flex flex-col gap-6 pt-8">
         <SectionMarker number="01" label="Introduction" />
 
-        <RevealFx translateY="4" fillWidth>
-          <Heading
-            wrap="balance"
-            variant="display-strong-l"
-            style={{ letterSpacing: "-0.03em", lineHeight: "1.05" }}
+        <Reveal translateY={4}>
+          <h1
+            className="text-4xl sm:text-5xl font-bold tracking-[-0.03em] text-balance font-primary"
+            style={{ lineHeight: "1.05" }}
           >
             {home.headline}
-          </Heading>
-        </RevealFx>
+          </h1>
+        </Reveal>
 
-        <RevealFx translateY="8" delay={0.2} fillWidth>
-          <Text
-            wrap="balance"
-            onBackground="accent-weak"
-            variant="body-default-xl"
-            style={{ maxWidth: "48ch", lineHeight: "1.7" }}
-          >
+        <Reveal translateY={8} delay={0.2}>
+          <p className="text-lg text-primary/70 max-w-[48ch] leading-relaxed text-balance">
             {home.subline}
-          </Text>
-        </RevealFx>
+          </p>
+        </Reveal>
 
-        <RevealFx delay={0.4} fillWidth>
-          <Flex gap="16" wrap paddingTop="8">
-            <Button
-              href={home.contactCta.link}
-              prefixIcon={home.contactCta.icon}
-              label={home.contactCta.title}
-              size="m"
-              variant="secondary"
-              data-border="rounded"
-            />
-            <Button
-              href={about.path}
-              variant="secondary"
-              size="m"
-              arrowIcon
-              data-border="rounded"
-            >
-              <Flex gap="8" vertical="center">
+        <Reveal delay={0.4}>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Button asChild variant="outline" className="rounded-full gap-2">
+              <Link href={home.contactCta.link}>
+                <Mail className="h-4 w-4" />
+                {home.contactCta.title}
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full gap-2">
+              <Link href={about.path}>
                 {about.avatar.display && (
-                  <Avatar
-                    style={{ marginLeft: "-0.75rem", marginRight: "0.25rem" }}
-                    src={person.avatar}
-                    size="m"
-                  />
+                  <Avatar className="w-5 h-5 -ml-1">
+                    <AvatarImage src={person.avatar} alt={person.name} />
+                    <AvatarFallback>{person.firstName[0]}</AvatarFallback>
+                  </Avatar>
                 )}
                 {about.title}
-              </Flex>
+              </Link>
             </Button>
-          </Flex>
-        </RevealFx>
-      </Column>
+          </div>
+        </Reveal>
+      </div>
 
-      {/* ── 02 · SKILLS ────────────────────────────────────── */}
-      <Column fillWidth gap="l">
+      {/* 02 · SKILLS */}
+      <div className="w-full flex flex-col gap-6">
         <SectionMarker number="02" label="Skills & Tools" />
-        <RevealFx translateY="8" delay={0.1}>
-          <LogoCloud
-            logos={person.skills.map((skill) => ({
-              iconSrc: skill.src,
-              size: "xl",
-              wordmark: false,
-              alt: skill.title,
-            }))}
-            columns="6"
-            mobileColumns="3"
-            gap="16"
-            limit={12}
-          />
-        </RevealFx>
-      </Column>
+        <Reveal translateY={8} delay={0.1}>
+          <div className="grid grid-cols-6 sm:grid-cols-6 gap-4">
+            {person.skills.slice(0, 12).map((skill) => (
+              <Link
+                key={skill.title}
+                href={skill.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center p-3 rounded-lg hover:bg-secondary transition-colors"
+                title={skill.title}
+              >
+                <Image
+                  src={skill.src}
+                  alt={skill.title}
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 object-contain"
+                />
+              </Link>
+            ))}
+          </div>
+        </Reveal>
+      </div>
 
-      {/* ── 03 · SELECTED WORK ─────────────────────────────── */}
-      <Column fillWidth gap="l">
+      {/* 03 · SELECTED WORK */}
+      <div className="w-full flex flex-col gap-6">
         <SectionMarker number="03" label={home.projectsSectionTitle} />
-        <RevealFx translateY="16" delay={0.15}>
+        <Reveal translateY={16} delay={0.15}>
           <Projects range={[1, 2]} />
-        </RevealFx>
-      </Column>
+        </Reveal>
+      </div>
 
-      {/* ── 04 · FROM THE BLOG ─────────────────────────────── */}
+      {/* 04 · FROM THE BLOG */}
       {routes["/blog"] && (
-        <Column fillWidth gap="l">
+        <div className="w-full flex flex-col gap-6">
           <SectionMarker number="04" label={home.blogSectionTitle} />
-          <Flex fillWidth paddingX="20">
-            <Posts range={[1, 2]} columns="2" />
-          </Flex>
-        </Column>
+          <Posts range={[1, 2]} columns="2" />
+        </div>
       )}
-
-      {newsletter.display && <Mailchimp newsletter={newsletter} />}
-    </Column>
+    </div>
   );
 }
