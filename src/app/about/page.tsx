@@ -1,98 +1,64 @@
-import {
-  Avatar,
-  Button,
-  Column,
-  Flex,
-  Grid,
-  Heading,
-  Icon,
-  IconButton,
-  Logo,
-  SmartImage,
-  Tag,
-  Text,
-} from "@/once-ui/components";
-import { baseURL } from "@/app/resources";
+import Image from "next/image";
+import Link from "next/link";
+import { Globe, Github, Linkedin, Mail, Twitter } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import TableOfContents from "@/components/about/TableOfContents";
-import styles from "@/components/about/about.module.scss";
+import { JsonLd } from "@/components/JsonLd";
+import { baseURL } from "@/app/resources";
 import { person, about, social } from "@/app/resources/content";
+import { Metadata } from "next";
 import React from "react";
-import { Meta, Schema } from "@/once-ui/modules";
+
+const iconMap: Record<string, React.ElementType> = {
+  github: Github,
+  linkedin: Linkedin,
+  email: Mail,
+  x: Twitter,
+};
+
+export const metadata: Metadata = {
+  title: about.title,
+  description: about.description,
+  openGraph: {
+    title: about.title,
+    description: about.description,
+    url: `${baseURL}${about.path}`,
+    images: [`${baseURL}/og?title=${encodeURIComponent(about.title)}`],
+  },
+};
 
 function SectionDivider({ number, label }: { number: string; label: string }) {
   return (
-    <Flex gap="12" vertical="center" fillWidth style={{ marginBottom: "1.5rem" }}>
-      <span
-        style={{
-          fontFamily: "var(--font-code)",
-          fontSize: "0.65rem",
-          letterSpacing: "0.25em",
-          color: "var(--brand-on-background-weak)",
-          opacity: 0.7,
-          whiteSpace: "nowrap",
-        }}
-      >
+    <div className="flex items-center gap-3 mb-6">
+      <span className="font-code text-[0.65rem] tracking-[0.25em] text-primary/70 whitespace-nowrap">
         {number}
       </span>
-      <span
-        style={{
-          fontFamily: "var(--font-code)",
-          fontSize: "0.65rem",
-          letterSpacing: "0.2em",
-          textTransform: "uppercase" as const,
-          color: "var(--neutral-on-background-weak)",
-          opacity: 0.5,
-          whiteSpace: "nowrap",
-        }}
-      >
+      <span className="font-code text-[0.65rem] tracking-[0.2em] uppercase text-muted-foreground/50 whitespace-nowrap">
         {label}
       </span>
-      <div style={{ flex: 1, height: "1px", background: "var(--neutral-alpha-weak)" }} />
-    </Flex>
+      <div className="flex-1 h-px bg-border" />
+    </div>
   );
-}
-
-export async function generateMetadata() {
-  return Meta.generate({
-    title: about.title,
-    description: about.description,
-    baseURL: baseURL,
-    image: `${baseURL}/og?title=${encodeURIComponent(about.title)}`,
-    path: about.path,
-  });
 }
 
 export default function About() {
   const structure = [
-    {
-      title: about.intro.title,
-      display: about.intro.display,
-      items: [],
-    },
-    {
-      title: about.work.title,
-      display: about.work.display,
-      items: about.work.experiences.map((experience) => experience.company),
-    },
-    {
-      title: about.studies.title,
-      display: about.studies.display,
-      items: about.studies.institutions.map((institution) => institution.name),
-    },
-    {
-      title: about.technical.title,
-      display: about.technical.display,
-      items: person.skills.map((skill) => skill.title),
-    },
+    { title: about.intro.title, display: about.intro.display, items: [] },
+    { title: about.work.title, display: about.work.display, items: about.work.experiences.map((e: { company: string }) => e.company) },
+    { title: about.studies.title, display: about.studies.display, items: about.studies.institutions.map((i: { name: string }) => i.name) },
+    { title: about.technical.title, display: about.technical.display, items: person.skills.map((s: { title: string }) => s.title) },
   ];
+
   return (
-    <Column maxWidth="m">
-      <Schema
-        as="webPage"
+    <div className="w-full max-w-screen-md">
+      <JsonLd
+        type="WebPage"
         baseURL={baseURL}
+        path={about.path}
         title={about.title}
         description={about.description}
-        path={about.path}
         image={`${baseURL}/og?title=${encodeURIComponent(about.title)}`}
         author={{
           name: person.name,
@@ -100,239 +66,164 @@ export default function About() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      {about.tableOfContent.display && (
-        <Column
-          left="0"
-          style={{ top: "50%", transform: "translateY(-50%)" }}
-          position="fixed"
-          paddingLeft="24"
-          gap="32"
-          hide="s"
-        >
-          <TableOfContents structure={structure} about={about} />
-        </Column>
-      )}
-      <Flex fillWidth mobileDirection="column" horizontal="center">
-        {about.avatar.display && (
-          <Column
-            className={styles.avatar}
-            position="sticky"
-            minWidth="160"
-            paddingX="l"
-            paddingBottom="xl"
-            gap="m"
-            flex={3}
-            horizontal="center"
-          >
-            <Avatar src={person.avatar} size="xl" />
-            <Flex gap="8" vertical="center">
-              <Icon onBackground="accent-weak" name="globe" />
-              {person.location}
-            </Flex>
-            {person.languages.length > 0 && (
-              <Flex wrap gap="8">
-                {person.languages.map((language, index) => (
-                  <Tag key={language} size="l">
-                    {language}
-                  </Tag>
-                ))}
-              </Flex>
-            )}
-          </Column>
-        )}
-        <Column className={styles.blockAlign} flex={9} maxWidth={40}>
-          <Column
-            id={about.intro.title}
-            fillWidth
-            minHeight="160"
-            vertical="center"
-            marginBottom="32"
-          >
-            {about.calendar.display && (
-              <Flex
-                fitWidth
-                border="brand-alpha-medium"
-                className={styles.blockAlign}
-                style={{
-                  backdropFilter: "blur(var(--static-space-1))",
-                }}
-                background="brand-alpha-weak"
-                radius="full"
-                padding="4"
-                gap="8"
-                marginBottom="m"
-                vertical="center"
-              >
-                <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
-                <Flex paddingX="8">Schedule a call</Flex>
-                <IconButton
-                  href={about.calendar.link}
-                  data-border="rounded"
-                  variant="secondary"
-                  icon="chevronRight"
-                />
-              </Flex>
-            )}
-            <Heading className={styles.textAlign} variant="display-strong-xl">
-              {person.name}
-            </Heading>
-            <Text
-              className={styles.textAlign}
-              variant="display-default-xs"
-              onBackground="accent-weak"
-            >
-              {person.role}
-            </Text>
-            {social.length > 0 && (
-              <Flex className={styles.blockAlign} paddingTop="20" paddingBottom="8" gap="8" wrap horizontal="center" fitWidth data-border="rounded">
-                {social.map(
-                  (item) =>
-                    item.link && (
-                        <React.Fragment key={item.name}>
-                            <Button
-                                className="s-flex-hide"
-                                key={item.name}
-                                href={item.link}
-                                prefixIcon={item.icon}
-                                label={item.name}
-                                size="s"
-                                variant="secondary"
-                            />
-                            <IconButton
-                                className="s-flex-show"
-                                size="l"
-                                key={`${item.name}-icon`}
-                                href={item.link}
-                                icon={item.icon}
-                                variant="secondary"
-                            />
-                        </React.Fragment>
-                    ),
-                )}
-              </Flex>
-            )}
-          </Column>
 
+      {/* Fixed ToC sidebar */}
+      {about.tableOfContent.display && (
+        <div className="fixed left-0 top-1/2 -translate-y-1/2 pl-6 gap-8 hidden lg:flex flex-col">
+          <TableOfContents structure={structure} about={about} />
+        </div>
+      )}
+
+      <div className="flex flex-col sm:flex-row justify-center gap-8">
+        {/* Sticky avatar column */}
+        {about.avatar.display && (
+          <div className="sm:sticky sm:top-20 flex flex-col items-center gap-3 min-w-[160px] px-4 pb-8 self-start">
+            <Avatar className="w-24 h-24">
+              <AvatarImage src={person.avatar} alt={person.name} />
+              <AvatarFallback>{person.firstName[0]}</AvatarFallback>
+            </Avatar>
+            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Globe className="h-3.5 w-3.5" />
+              {person.location}
+            </div>
+            {person.languages.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 justify-center">
+                {person.languages.map((lang: string) => (
+                  <Badge key={lang} variant="secondary" className="text-xs">
+                    {lang}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Main content */}
+        <div className="flex-[9] max-w-[640px] flex flex-col">
+          {/* Hero */}
+          <div id={about.intro.title} className="min-h-[160px] flex flex-col justify-center mb-8">
+            <h1 className="text-4xl font-bold font-primary">{person.name}</h1>
+            <p className="text-lg text-primary/70 mt-1">{person.role}</p>
+            {social.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-5">
+                {social.map((item: { name: string; link?: string; icon: string }) => {
+                  if (!item.link) return null;
+                  const Icon = iconMap[item.icon] ?? Mail;
+                  return (
+                    <React.Fragment key={item.name}>
+                      <Button asChild variant="outline" size="sm" className="hidden sm:flex gap-1.5 text-xs">
+                        <Link href={item.link} target="_blank" rel="noopener noreferrer">
+                          <Icon className="h-3.5 w-3.5" />
+                          {item.name}
+                        </Link>
+                      </Button>
+                      <Button asChild variant="outline" size="icon" className="sm:hidden w-8 h-8">
+                        <Link href={item.link} target="_blank" rel="noopener noreferrer" aria-label={item.name}>
+                          <Icon className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Intro */}
           {about.intro.display && (
             <>
               <SectionDivider number="01" label={about.intro.title} />
-              <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
+              <div className="text-base leading-relaxed mb-10 flex flex-col gap-4">
                 {about.intro.description}
-              </Column>
+              </div>
             </>
           )}
 
+          {/* Work */}
           {about.work.display && (
             <>
               <SectionDivider number="02" label={about.work.title} />
-              <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
+              <h2 id={about.work.title} className="text-2xl font-bold font-primary mb-4">
                 {about.work.title}
-              </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
-                {about.work.experiences.map((experience, index) => (
-                  <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
-                    <Flex fillWidth horizontal="space-between" vertical="end" marginBottom="4" mobileDirection="column">
-                      <Text id={experience.company} variant="heading-strong-l">
-                      {experience.role}
-                      </Text>
-                      <Text variant="heading-default-xs" onBackground="neutral-weak">
-                        {experience.timeframe}
-                      </Text>
-                    </Flex>
-                    <Text variant="heading-default-s" onBackground="accent-weak" marginBottom="m">
-                      {experience.company}
-                    </Text>
-                    <Column as="ul" gap="16">
-                      {experience.achievements.map((achievement: JSX.Element, index: number) => (
-                        <Text
-                          as="li"
-                          variant="body-default-m"
-                          key={`${experience.company}-${index}`}
-                        >
+              </h2>
+              <div className="flex flex-col gap-8 mb-10">
+                {about.work.experiences.map((exp: { company: string; role: string; timeframe: string; achievements: React.ReactNode[] }, i: number) => (
+                  <div key={`${exp.company}-${i}`} className="flex flex-col">
+                    <div className="flex justify-between items-end mb-1 flex-wrap gap-1">
+                      <span id={exp.company} className="text-base font-semibold">
+                        {exp.role}
+                      </span>
+                      <span className="text-xs text-muted-foreground">{exp.timeframe}</span>
+                    </div>
+                    <span className="text-sm text-primary/70 mb-3">{exp.company}</span>
+                    <ul className="flex flex-col gap-3">
+                      {exp.achievements.map((achievement: React.ReactNode, j: number) => (
+                        <li key={j} className="text-sm text-foreground/80 leading-relaxed">
                           {achievement}
-                        </Text>
+                        </li>
                       ))}
-                    </Column>
-                    {experience.images.length > 0 && (
-                      <Flex fillWidth paddingTop="m" paddingLeft="40" wrap>
-                        {experience.images.map((image, index) => (
-                          <Flex
-                            key={index}
-                            border="neutral-medium"
-                            radius="m"
-                            //@ts-ignore
-                            minWidth={image.width}
-                            //@ts-ignore
-                            height={image.height}
-                          >
-                            <SmartImage
-                              enlarge
-                              radius="m"
-                              //@ts-ignore
-                              sizes={image.width.toString()}
-                              //@ts-ignore
-                              alt={image.alt}
-                              //@ts-ignore
-                              src={image.src}
-                            />
-                          </Flex>
-                        ))}
-                      </Flex>
-                    )}
-                  </Column>
+                    </ul>
+                  </div>
                 ))}
-              </Column>
+              </div>
             </>
           )}
 
+          {/* Studies */}
           {about.studies.display && (
             <>
               <SectionDivider number="03" label={about.studies.title} />
-              <Heading as="h2" id={about.studies.title} variant="display-strong-s" marginBottom="m">
+              <h2 id={about.studies.title} className="text-2xl font-bold font-primary mb-4">
                 {about.studies.title}
-              </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
-                {about.studies.institutions.map((institution, index) => (
-                  <Column key={`${institution.name}-${index}`} fillWidth gap="4">
-                    <Flex fillWidth horizontal="space-between" vertical="end" marginBottom="4" mobileDirection="column">
-                      <Text id={institution.name} variant="heading-strong-s">
-                        {institution.description}
-                      </Text>
-                      <Text variant="heading-default-xs" onBackground="neutral-weak">
-                          {institution.timeframe}
-                        </Text>
-                    </Flex>
-                    <Text variant="heading-default-xs" onBackground="accent-weak">
-                      {institution.name}
-                    </Text>
-                  </Column>
+              </h2>
+              <div className="flex flex-col gap-6 mb-10">
+                {about.studies.institutions.map((inst: { name: string; description: string; timeframe: string }, i: number) => (
+                  <div key={`${inst.name}-${i}`} className="flex flex-col gap-1">
+                    <div className="flex justify-between items-end flex-wrap gap-1">
+                      <span id={inst.name} className="text-base font-semibold">
+                        {inst.description}
+                      </span>
+                      <span className="text-xs text-muted-foreground">{inst.timeframe}</span>
+                    </div>
+                    <span className="text-sm text-primary/70">{inst.name}</span>
+                  </div>
                 ))}
-              </Column>
+              </div>
             </>
           )}
 
+          {/* Technical skills */}
           {about.technical.display && (
             <>
               <SectionDivider number="04" label={about.technical.title} />
-              <Heading
-                as="h2"
-                id={about.technical.title}
-                variant="display-strong-s"
-                marginBottom="40"
-              >
+              <h2 id={about.technical.title} className="text-2xl font-bold font-primary mb-8">
                 {about.technical.title}
-              </Heading>
-              <Grid fillWidth gap='16' columns="4" mobileColumns='3' >
-                {person.skills.map((skill, index) => (
-                  <Flex key={`${skill}-${index}`} paddingTop="l" vertical="center" horizontal="center" >
-                    <Logo iconSrc={skill.src} size="xl" wordmark={false} href={skill.href} target="_blank"/>
-                  </Flex>
+              </h2>
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 mb-10">
+                {person.skills.map((skill: { title: string; src: string; href: string }, i: number) => (
+                  <Link
+                    key={`${skill.title}-${i}`}
+                    href={skill.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-secondary transition-colors"
+                    title={skill.title}
+                  >
+                    <Image
+                      src={skill.src}
+                      alt={skill.title}
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 object-contain"
+                    />
+                    <span className="text-xs text-muted-foreground text-center">{skill.title}</span>
+                  </Link>
                 ))}
-              </Grid>
+              </div>
             </>
           )}
-        </Column>
-      </Flex>
-    </Column>
+        </div>
+      </div>
+    </div>
   );
 }
