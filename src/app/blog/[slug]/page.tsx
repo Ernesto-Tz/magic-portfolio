@@ -1,18 +1,18 @@
 import { notFound } from "next/navigation";
 import { CustomMDX } from "@/components/mdx";
 import { getPosts } from "@/app/utils/utils";
-import { AvatarGroup, Button, Column, Heading, HeadingNav, Icon, Row, Text } from "@/once-ui/components";
 import { about, blog, person, baseURL } from "@/app/resources";
 import { formatDate } from "@/app/utils/formatDate";
-import ScrollToHash from "@/components/ScrollToHash";
-import { Metadata } from 'next';
-import { Meta, Schema } from "@/once-ui/modules";
+import { JsonLd } from "@/components/JsonLd";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
+import { Metadata } from "next";
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const posts = getPosts(["src", "app", "blog", "posts"]);
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({
@@ -20,89 +20,78 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string | string[] }>;
 }): Promise<Metadata> {
-  const routeParams = await params;
-  const slugPath = Array.isArray(routeParams.slug) ? routeParams.slug.join('/') : routeParams.slug || '';
-
-  const posts = getPosts(["src", "app", "blog", "posts"])
-  let post = posts.find((post) => post.slug === slugPath);
-
+  const { slug } = await params;
+  const slugPath = Array.isArray(slug) ? slug.join("/") : slug || "";
+  const post = getPosts(["src", "app", "blog", "posts"]).find((p) => p.slug === slugPath);
   if (!post) return {};
-
-  return Meta.generate({
+  return {
     title: post.metadata.title,
     description: post.metadata.summary,
-    baseURL: baseURL,
-    image: post.metadata.image ? `${baseURL}${post.metadata.image}` : `${baseURL}/og?title=${post.metadata.title}`,
-    path: `${blog.path}/${post.slug}`,
-  });
+    openGraph: {
+      title: post.metadata.title,
+      description: post.metadata.summary,
+      images: [post.metadata.image ? `${baseURL}${post.metadata.image}` : `${baseURL}/og?title=${post.metadata.title}`],
+    },
+  };
 }
 
-export default async function Blog({
-  params
-}: { params: Promise<{ slug: string | string[] }> }) {
-  const routeParams = await params;
-  const slugPath = Array.isArray(routeParams.slug) ? routeParams.slug.join('/') : routeParams.slug || '';
+export default async function BlogPost({
+  params,
+}: {
+  params: Promise<{ slug: string | string[] }>;
+}) {
+  const { slug } = await params;
+  const slugPath = Array.isArray(slug) ? slug.join("/") : slug || "";
+  const post = getPosts(["src", "app", "blog", "posts"]).find((p) => p.slug === slugPath);
 
-  let post = getPosts(["src", "app", "blog", "posts"]).find((post) => post.slug === slugPath);
+  if (!post) notFound();
 
-  if (!post) {
-    notFound();
-  }
-
-  const avatars =
-    post.metadata.team?.map((person) => ({
-      src: person.avatar,
-    })) || [];
+  const avatars = post.metadata.team?.map((p: { avatar: string }) => ({ src: p.avatar })) || [];
 
   return (
-    <Row fillWidth>
-      <Row maxWidth={12} hide="m"/>
-      <Row fillWidth horizontal="center">
-        <Column as="section" maxWidth="xs" gap="l">
-          <Schema
-            as="blogPosting"
-            baseURL={baseURL}
-            path={`${blog.path}/${post.slug}`}
-            title={post.metadata.title}
-            description={post.metadata.summary}
-            datePublished={post.metadata.publishedAt}
-            dateModified={post.metadata.publishedAt}
-            image={`${baseURL}/og?title=${encodeURIComponent(post.metadata.title)}`}
-            author={{
-              name: person.name,
-              url: `${baseURL}${about.path}`,
-              image: `${baseURL}${person.avatar}`,
-            }}
-          />
-          <Button data-border="rounded" href="/blog" weight="default" variant="tertiary" size="s" prefixIcon="chevronLeft">
+    <div className="w-full flex justify-center">
+      <div className="w-full max-w-screen-sm flex flex-col gap-6">
+        <JsonLd
+          type="BlogPosting"
+          baseURL={baseURL}
+          path={`${blog.path}/${post.slug}`}
+          title={post.metadata.title}
+          description={post.metadata.summary}
+          datePublished={post.metadata.publishedAt}
+          dateModified={post.metadata.publishedAt}
+          image={`${baseURL}/og?title=${encodeURIComponent(post.metadata.title)}`}
+          author={{
+            name: person.name,
+            url: `${baseURL}${about.path}`,
+            image: `${baseURL}${person.avatar}`,
+          }}
+        />
+        <Button asChild variant="ghost" size="sm" className="w-fit -ml-2 gap-1 text-muted-foreground">
+          <Link href="/blog">
+            <ChevronLeft className="h-4 w-4" />
             Posts
-          </Button>
-          <Heading variant="display-strong-s">{post.metadata.title}</Heading>
-          <Row gap="12" vertical="center">
-            {avatars.length > 0 && <AvatarGroup size="s" avatars={avatars} />}
-            <Text variant="body-default-s" onBackground="neutral-weak">
-              {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
-            </Text>
-          </Row>
-          <Column as="article" fillWidth>
-            <CustomMDX source={post.content} />
-          </Column>
-          <ScrollToHash />
-        </Column>
-    </Row>
-    <Column maxWidth={12} paddingLeft="40" fitHeight position="sticky" top="80" gap="16" hide="m">
-      <Row
-        gap="12"
-        paddingLeft="2"
-        vertical="center"
-        onBackground="neutral-medium"
-        textVariant="label-default-s"
-      >
-        <Icon name="document" size="xs" />
-        On this page
-      </Row>
-      <HeadingNav fitHeight/>
-    </Column>
-    </Row>
+          </Link>
+        </Button>
+        <h1 className="text-3xl font-bold font-primary">{post.metadata.title}</h1>
+        <div className="flex items-center gap-3">
+          {avatars.length > 0 && (
+            <div className="flex">
+              {avatars.map((avatar: { src: string }, i: number) => (
+                <Avatar key={i} className="w-6 h-6 border-2 border-background" style={{ marginLeft: i > 0 ? "-6px" : 0 }}>
+                  <AvatarImage src={avatar.src} />
+                  <AvatarFallback>?</AvatarFallback>
+                </Avatar>
+              ))}
+            </div>
+          )}
+          <p className="text-sm text-muted-foreground">
+            {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
+          </p>
+        </div>
+        <article className="w-full">
+          <CustomMDX source={post.content} />
+        </article>
+      </div>
+    </div>
   );
 }
