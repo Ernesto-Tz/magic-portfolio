@@ -11,6 +11,7 @@ import { baseURL } from "@/app/resources";
 import { Metadata } from "next";
 import React from "react";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
+import { SanityImageSource } from "@sanity/image-url";
 import { sanityFetch } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import {
@@ -58,7 +59,7 @@ export default async function About() {
       firstName: string;
       name: string;
       role: string;
-      avatar: unknown;
+      avatar: SanityImageSource;
       location: string;
       languages: string[];
       introText: PortableTextBlock[];
