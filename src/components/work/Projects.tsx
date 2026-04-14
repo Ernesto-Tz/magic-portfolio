@@ -8,8 +8,7 @@ interface SanityProject {
   slug: string;
   summary: string;
   publishedAt: string;
-  coverImage: unknown;
-  images: unknown[];
+  coverImage: SanityImageSource | null;
   link?: string;
 }
 
@@ -27,7 +26,7 @@ export function Projects({ projects = [], range }: ProjectsProps) {
     <div className="w-full flex flex-col gap-12 mb-10 px-4">
       {displayed.map((project, index) => {
         const coverImageUrl = project.coverImage
-          ? urlFor(project.coverImage as SanityImageSource).width(960).url()
+          ? urlFor(project.coverImage).width(960).url()
           : null;
 
         return (

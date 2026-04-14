@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { baseURL, routes } from "@/app/resources";
 import { Metadata } from "next";
 import { Mail } from "lucide-react";
+import { SanityImageSource } from "@sanity/image-url";
 import { sanityFetch } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import {
@@ -73,8 +74,7 @@ export default async function Home() {
       slug: string;
       summary: string;
       publishedAt: string;
-      coverImage: unknown;
-      images: unknown[];
+      coverImage: SanityImageSource | null;
       link?: string;
     }[]>({ query: ALL_WORK_PROJECTS_QUERY, tags: ["workProject"] }),
     sanityFetch<{

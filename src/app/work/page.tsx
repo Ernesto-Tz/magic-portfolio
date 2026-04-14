@@ -25,8 +25,7 @@ export default async function Work() {
       slug: string;
       summary: string;
       publishedAt: string;
-      coverImage: SanityImageSource;
-      images: SanityImageSource[];
+      coverImage: SanityImageSource | null;
       link?: string;
     }[]>({ query: ALL_WORK_PROJECTS_QUERY, tags: ["workProject"] }),
     sanityFetch<{ name: string }>({
