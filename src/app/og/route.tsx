@@ -1,6 +1,11 @@
 import { ImageResponse } from "next/og";
 import { baseURL } from "@/app/resources";
-import { person } from "@/app/resources/content";
+
+const person = {
+  name: "Ernesto Tzompantzi",
+  role: "Frontend Developer",
+  avatar: "/images/portfolio-avatar-bw.jpg",
+};
 
 export const runtime = "edge";
 
