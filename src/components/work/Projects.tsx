@@ -39,7 +39,7 @@ export function Projects({ projects = [], range }: ProjectsProps) {
           <ProjectCard
             priority={index < 2}
             key={project._id}
-            href={`work/${project.slug}`}
+            href={`/work/${project.slug}`}
             images={imageUrls}
             title={project.title}
             description={project.summary}
