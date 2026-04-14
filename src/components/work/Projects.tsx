@@ -1,38 +1,54 @@
-import { getPosts } from "@/app/utils/utils";
 import { ProjectCard } from "@/components";
+import { urlFor } from "@/sanity/lib/image";
+import { SanityImageSource } from "@sanity/image-url";
+
+interface SanityProject {
+  _id: string;
+  title: string;
+  slug: string;
+  summary: string;
+  publishedAt: string;
+  coverImage: unknown;
+  images: unknown[];
+  link?: string;
+}
 
 interface ProjectsProps {
+  projects?: SanityProject[];
   range?: [number, number?];
 }
 
-export function Projects({ range }: ProjectsProps) {
-  const allProjects = getPosts(["src", "app", "work", "projects"]);
-
-  const sortedProjects = allProjects.sort(
+export function Projects({ projects = [], range }: ProjectsProps) {
+  const sorted = [...projects].sort(
     (a, b) =>
-      new Date(b.metadata.publishedAt).getTime() -
-      new Date(a.metadata.publishedAt).getTime()
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
-  const displayedProjects = range
-    ? sortedProjects.slice(range[0] - 1, range[1] ?? sortedProjects.length)
-    : sortedProjects;
+  const displayed = range
+    ? sorted.slice(range[0] - 1, range[1] ?? sorted.length)
+    : sorted;
 
   return (
     <div className="w-full flex flex-col gap-12 mb-10 px-4">
-      {displayedProjects.map((post, index) => (
-        <ProjectCard
-          priority={index < 2}
-          key={post.slug}
-          href={`work/${post.slug}`}
-          images={post.metadata.images}
-          title={post.metadata.title}
-          description={post.metadata.summary}
-          content={post.content}
-          avatars={post.metadata.team?.map((member: { avatar: string }) => ({ src: member.avatar })) || []}
-          link={post.metadata.link || ""}
-        />
-      ))}
+      {displayed.map((project, index) => {
+        const imageUrls = (project.images ?? [])
+          .filter(Boolean)
+          .map((img) => urlFor(img as SanityImageSource).width(960).url());
+
+        return (
+          <ProjectCard
+            priority={index < 2}
+            key={project._id}
+            href={`work/${project.slug}`}
+            images={imageUrls}
+            title={project.title}
+            description={project.summary}
+            content=""
+            avatars={[]}
+            link={project.link || ""}
+          />
+        );
+      })}
     </div>
   );
 }

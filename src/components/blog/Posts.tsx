@@ -1,31 +1,39 @@
-import { getPosts } from "@/app/utils/utils";
 import Post from "./Post";
 import { cn } from "@/lib/utils";
 
+interface SanityPost {
+  _id: string;
+  title: string;
+  slug: string;
+  summary: string;
+  publishedAt: string;
+  tag?: string;
+  coverImage: unknown;
+}
+
 interface PostsProps {
-  range?: [number] | [number, number];
+  posts?: SanityPost[];
+  range?: [number, number?];
   columns?: "1" | "2" | "3";
   thumbnail?: boolean;
   direction?: "row" | "column";
 }
 
 export function Posts({
+  posts = [],
   range,
   columns = "1",
   thumbnail = false,
   direction,
 }: PostsProps) {
-  const allBlogs = getPosts(["src", "app", "blog", "posts"]);
-
-  const sortedBlogs = allBlogs.sort(
+  const sorted = [...posts].sort(
     (a, b) =>
-      new Date(b.metadata.publishedAt).getTime() -
-      new Date(a.metadata.publishedAt).getTime()
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
-  const displayedBlogs = range
-    ? sortedBlogs.slice(range[0] - 1, range.length === 2 ? range[1] : sortedBlogs.length)
-    : sortedBlogs;
+  const displayed = range
+    ? sorted.slice(range[0] - 1, range[1] ?? sorted.length)
+    : sorted;
 
   const gridCols =
     columns === "2"
@@ -34,13 +42,13 @@ export function Posts({
       ? "grid-cols-1 sm:grid-cols-3"
       : "grid-cols-1";
 
-  if (displayedBlogs.length === 0) return null;
+  if (displayed.length === 0) return null;
 
   return (
     <div className={cn("grid gap-3 w-full mb-10", gridCols)}>
-      {displayedBlogs.map((post) => (
+      {displayed.map((post) => (
         <Post
-          key={post.slug}
+          key={post._id}
           post={post}
           thumbnail={thumbnail}
           direction={direction}
