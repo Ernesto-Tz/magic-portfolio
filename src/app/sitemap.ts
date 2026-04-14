@@ -18,12 +18,12 @@ export default async function sitemap() {
   ]);
 
   const sports = sportsPosts.map((post) => ({
-    url: `${baseURL}/sports/${post.slug}`,
+    url: `${baseURL}sports/${post.slug}`,
     lastModified: new Date().toISOString().split("T")[0],
   }));
 
   const works = workProjects.map((project) => ({
-    url: `${baseURL}/work/${project.slug}`,
+    url: `${baseURL}work/${project.slug}`,
     lastModified: new Date().toISOString().split("T")[0],
   }));
 
