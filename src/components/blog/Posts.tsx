@@ -26,14 +26,9 @@ export function Posts({
   thumbnail = false,
   direction,
 }: PostsProps) {
-  const sorted = [...posts].sort(
-    (a, b) =>
-      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-  );
-
   const displayed = range
-    ? sorted.slice(range[0] - 1, range[1] ?? sorted.length)
-    : sorted;
+    ? posts.slice(range[0] - 1, range[1] ?? posts.length)
+    : posts;
 
   const gridCols =
     columns === "2"

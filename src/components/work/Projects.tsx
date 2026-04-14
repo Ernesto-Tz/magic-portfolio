@@ -19,14 +19,9 @@ interface ProjectsProps {
 }
 
 export function Projects({ projects = [], range }: ProjectsProps) {
-  const sorted = [...projects].sort(
-    (a, b) =>
-      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-  );
-
   const displayed = range
-    ? sorted.slice(range[0] - 1, range[1] ?? sorted.length)
-    : sorted;
+    ? projects.slice(range[0] - 1, range[1] ?? projects.length)
+    : projects;
 
   return (
     <div className="w-full flex flex-col gap-12 mb-10 px-4">

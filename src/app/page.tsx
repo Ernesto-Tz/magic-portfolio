@@ -60,7 +60,6 @@ export default async function Home() {
       tags: ["skill"],
     }),
     sanityFetch<{
-      headline: string;
       subline: string;
       contactCtaTitle: string;
       featuredLabel: string;
