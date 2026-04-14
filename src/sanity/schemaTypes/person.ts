@@ -4,6 +4,7 @@ export const person = defineType({
   name: "person",
   title: "Person",
   type: "document",
+  description: "Singleton — only one Person document should exist. Create it once and update it.",
   fields: [
     defineField({ name: "firstName", type: "string", title: "First Name" }),
     defineField({ name: "lastName", type: "string", title: "Last Name" }),

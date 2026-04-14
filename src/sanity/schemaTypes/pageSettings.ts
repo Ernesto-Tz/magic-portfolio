@@ -4,6 +4,7 @@ export const pageSettings = defineType({
   name: "pageSettings",
   title: "Page Settings",
   type: "document",
+  description: "Singleton — only one Page Settings document should exist. Create it once and update it.",
   fields: [
     defineField({ name: "headline", type: "string", title: "Hero Headline", description: "e.g. Welcome to my website!" }),
     defineField({ name: "subline", type: "text", title: "Hero Subline", rows: 3 }),

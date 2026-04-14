@@ -6,7 +6,7 @@ export const galleryImage = defineType({
   type: "document",
   fields: [
     defineField({ name: "image", type: "image", title: "Image", options: { hotspot: true }, validation: (r) => r.required() }),
-    defineField({ name: "alt", type: "string", title: "Alt Text" }),
+    defineField({ name: "alt", type: "string", title: "Alt Text", validation: (r) => r.required() }),
     defineField({
       name: "orientation",
       type: "string",
