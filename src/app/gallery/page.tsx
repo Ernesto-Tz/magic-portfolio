@@ -26,8 +26,10 @@ export default async function Gallery() {
       alt: string;
       orientation: string;
     }[]>({ query: GALLERY_IMAGES_QUERY, tags: ["galleryImage"] }),
-    sanityFetch<{ name: string }>({ query: PERSON_QUERY, tags: ["person"] }),
+    sanityFetch<{ name: string; avatar: SanityImageSource | null }>({ query: PERSON_QUERY, tags: ["person"] }),
   ]);
+
+  const authorImageUrl = person.avatar ? urlFor(person.avatar).width(200).url() : "";
 
   const images = rawImages.map((img) => ({
     _id: img._id,
@@ -48,7 +50,7 @@ export default async function Gallery() {
         author={{
           name: person.name,
           url: `${baseURL}/gallery`,
-          image: "",
+          image: authorImageUrl,
         }}
       />
       <MasonryGrid images={images} />

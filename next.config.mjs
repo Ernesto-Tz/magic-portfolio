@@ -12,11 +12,16 @@ const withMDX = mdx({
 const nextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote"],
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.sanity.io" },
+    ],
+  },
   webpack(config, { isServer }) {
     // Next.js 15.4.10 ships a vendored React (next/dist/compiled/react) that
     // does NOT export useEffectEvent, which sanity@5.20.0 requires.
-    // Only patch the client bundle's react$ alias — leave server/edge/RSC
-    // rules untouched so the react-server condition keeps working.
+    // Patch config.resolve.alias directly in the client bundle only —
+    // leave the server bundle untouched so the react-server condition works.
     if (isServer) return config;
 
     const path = require("path");
@@ -25,50 +30,16 @@ const nextConfig = {
       require.resolve("react-dom/package.json")
     );
 
-    function isBrowserClientAlias(alias) {
-      // Only patch aliases that point to the regular (non-react-server) compiled
-      // react. Skip edge/server aliases (they contain "react-server" in target).
-      if (!alias) return false;
-      const reactTarget = alias["react$"];
-      if (!reactTarget) return false;
-      if (typeof reactTarget !== "string") return false;
-      return (
-        reactTarget.includes("compiled/react") &&
-        !reactTarget.includes("react-server")
-      );
-    }
+    // Alias to the package DIRECTORY (not a file) so webpack can resolve
+    // both "react" and subpaths like "react/jsx-runtime" through the
+    // package's own exports — avoiding the vendored Next.js compiled/react
+    // which lacks useEffectEvent required by sanity@5.
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "react": realReactDir,
+      "react-dom": realReactDomDir,
+    };
 
-    function fixReactAliases(rules) {
-      if (!Array.isArray(rules)) return;
-      for (const rule of rules) {
-        if (!rule || typeof rule !== "object") continue;
-        if (rule.resolve && isBrowserClientAlias(rule.resolve.alias)) {
-          const alias = rule.resolve.alias;
-          alias["react$"] = path.join(realReactDir, "index.js");
-          if (alias["react/jsx-runtime$"])
-            alias["react/jsx-runtime$"] = path.join(
-              realReactDir,
-              "jsx-runtime.js"
-            );
-          if (alias["react/jsx-dev-runtime$"])
-            alias["react/jsx-dev-runtime$"] = path.join(
-              realReactDir,
-              "jsx-dev-runtime.js"
-            );
-          if (alias["react-dom$"])
-            alias["react-dom$"] = path.join(realReactDomDir, "index.js");
-          if (alias["react-dom/client$"])
-            alias["react-dom/client$"] = path.join(
-              realReactDomDir,
-              "client.js"
-            );
-        }
-        if (rule.oneOf) fixReactAliases(rule.oneOf);
-        if (rule.rules) fixReactAliases(rule.rules);
-      }
-    }
-
-    fixReactAliases(config.module.rules);
     return config;
   },
 };
