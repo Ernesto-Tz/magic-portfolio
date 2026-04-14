@@ -5,7 +5,7 @@ const routes = {
   "/": true,
   "/about": true,
   "/work": true,
-  "/blog": true,
+  "/sports": true,
   "/gallery": true,
 };
 
@@ -148,4 +148,11 @@ const mailchimp = {
   },
 };
 
-export { routes, protectedRoutes, effects, style, display, mailchimp, baseURL, font };
+const nav = {
+  timezone: "Europe/Budapest",
+  aboutLabel: "About",
+  workLabel: "Work",
+  sportsLabel: "Sports",
+};
+
+export { routes, protectedRoutes, effects, style, display, mailchimp, baseURL, font, nav };

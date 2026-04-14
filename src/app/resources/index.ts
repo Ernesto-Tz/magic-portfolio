@@ -8,6 +8,7 @@ export {
   mailchimp,
   baseURL,
   font,
+  nav,
 } from "@/app/resources/config";
 export {
   person,

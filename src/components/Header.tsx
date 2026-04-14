@@ -2,13 +2,12 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Home, User, LayoutGrid, BookOpen } from "lucide-react";
+import { Home, User, LayoutGrid, Dumbbell } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { routes, display } from "@/app/resources";
-import { person, about, blog, work } from "@/app/resources/content";
+import { routes, display, nav } from "@/app/resources";
 import { ThemeToggle } from "./ThemeToggle";
 
 type TimeDisplayProps = { timeZone: string; locale?: string };
@@ -49,7 +48,6 @@ function NavButton({
 }) {
   return (
     <>
-      {/* Desktop: icon + label */}
       <Button
         asChild
         variant="ghost"
@@ -66,7 +64,6 @@ function NavButton({
           {label}
         </Link>
       </Button>
-      {/* Mobile: icon only */}
       <Button
         asChild
         variant="ghost"
@@ -91,31 +88,27 @@ export const Header = () => {
 
   return (
     <>
-      {/* Fade overlay top (hidden on mobile) */}
       <div className="hidden sm:block fixed top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent z-[9] pointer-events-none" />
-      {/* Fade overlay bottom (mobile only) */}
       <div className="sm:hidden fixed bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background to-transparent z-[9] pointer-events-none" />
 
       <header className="sticky top-0 sm:relative z-[9] w-full flex items-center justify-center px-2 py-2">
-        {/* Location — left side, hidden on mobile */}
         <div className="flex-1 hidden sm:flex pl-3 text-xs text-muted-foreground">
-          {display.location && person.location}
+          {display.location && nav.timezone}
         </div>
 
-        {/* Pill nav */}
         <div className="flex items-center bg-card border border-border rounded-[10px] shadow-lg px-1 py-1 gap-1">
           {routes["/"] && (
             <NavButton href="/" selected={pathname === "/"} icon={Home} label="Home" />
           )}
           <Separator orientation="vertical" className="h-5 mx-0.5" />
           {routes["/about"] && (
-            <NavButton href="/about" selected={pathname === "/about"} icon={User} label={about.label} />
+            <NavButton href="/about" selected={pathname === "/about"} icon={User} label={nav.aboutLabel} />
           )}
           {routes["/work"] && (
-            <NavButton href="/work" selected={pathname.startsWith("/work")} icon={LayoutGrid} label={work.label} />
+            <NavButton href="/work" selected={pathname.startsWith("/work")} icon={LayoutGrid} label={nav.workLabel} />
           )}
-          {routes["/blog"] && (
-            <NavButton href="/blog" selected={pathname.startsWith("/blog")} icon={BookOpen} label={blog.label} />
+          {routes["/sports"] && (
+            <NavButton href="/sports" selected={pathname.startsWith("/sports")} icon={Dumbbell} label={nav.sportsLabel} />
           )}
           {display.themeSwitcher && (
             <>
@@ -125,9 +118,8 @@ export const Header = () => {
           )}
         </div>
 
-        {/* Clock — right side, hidden on mobile */}
         <div className="flex-1 hidden sm:flex justify-end pr-3 text-xs text-muted-foreground">
-          {display.time && <TimeDisplay timeZone={person.location} />}
+          {display.time && <TimeDisplay timeZone={nav.timezone} />}
         </div>
       </header>
     </>

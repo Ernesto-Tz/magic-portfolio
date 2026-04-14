@@ -15,7 +15,7 @@ interface SanityPost {
   summary: string;
   publishedAt: string;
   tag?: string;
-  coverImage: unknown;
+  coverImage?: unknown;
 }
 
 interface PostProps {
