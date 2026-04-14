@@ -1,37 +1,56 @@
 import { baseURL } from "@/app/resources";
-import { about, person, work } from "@/app/resources/content";
 import { Projects } from "@/components/work/Projects";
 import { JsonLd } from "@/components/JsonLd";
 import { Metadata } from "next";
+import { sanityFetch } from "@/sanity/lib/client";
+import { ALL_WORK_PROJECTS_QUERY, PERSON_QUERY } from "@/sanity/lib/queries";
+import { SanityImageSource } from "@sanity/image-url";
 
 export const metadata: Metadata = {
-  title: work.title,
-  description: work.description,
+  title: "Projects — Ernesto Tzompantzi",
+  description: "Collaborations & projects by Ernesto Tzompantzi",
   openGraph: {
-    title: work.title,
-    description: work.description,
-    url: `${baseURL}${work.path}`,
-    images: [`${baseURL}/og?title=${encodeURIComponent(work.title)}`],
+    title: "Projects — Ernesto Tzompantzi",
+    description: "Collaborations & projects by Ernesto Tzompantzi",
+    url: `${baseURL}/work`,
+    images: [`${baseURL}/og?title=${encodeURIComponent("Projects — Ernesto Tzompantzi")}`],
   },
 };
 
-export default function Work() {
+export default async function Work() {
+  const [projects, person] = await Promise.all([
+    sanityFetch<{
+      _id: string;
+      title: string;
+      slug: string;
+      summary: string;
+      publishedAt: string;
+      coverImage: SanityImageSource;
+      images: SanityImageSource[];
+      link?: string;
+    }[]>({ query: ALL_WORK_PROJECTS_QUERY, tags: ["workProject"] }),
+    sanityFetch<{ name: string }>({
+      query: PERSON_QUERY,
+      tags: ["person"],
+    }),
+  ]);
+
   return (
     <div className="w-full max-w-screen-md">
       <JsonLd
         type="WebPage"
         baseURL={baseURL}
-        path={work.path}
-        title={work.title}
-        description={work.description}
-        image={`${baseURL}/og?title=${encodeURIComponent(work.title)}`}
+        path="/work"
+        title="Projects — Ernesto Tzompantzi"
+        description="Collaborations & projects by Ernesto Tzompantzi"
+        image={`${baseURL}/og?title=${encodeURIComponent("Projects — Ernesto Tzompantzi")}`}
         author={{
           name: person.name,
-          url: `${baseURL}${about.path}`,
-          image: `${baseURL}${person.avatar}`,
+          url: `${baseURL}/about`,
+          image: "",
         }}
       />
-      <Projects />
+      <Projects projects={projects} />
     </div>
   );
 }

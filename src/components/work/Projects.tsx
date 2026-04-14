@@ -26,16 +26,16 @@ export function Projects({ projects = [], range }: ProjectsProps) {
   return (
     <div className="w-full flex flex-col gap-12 mb-10 px-4">
       {displayed.map((project, index) => {
-        const imageUrls = (project.images ?? [])
-          .filter(Boolean)
-          .map((img) => urlFor(img as SanityImageSource).width(960).url());
+        const coverImageUrl = project.coverImage
+          ? urlFor(project.coverImage as SanityImageSource).width(960).url()
+          : null;
 
         return (
           <ProjectCard
             priority={index < 2}
             key={project._id}
             href={`/work/${project.slug}`}
-            images={imageUrls}
+            images={coverImageUrl ? [coverImageUrl] : []}
             title={project.title}
             description={project.summary}
             content=""

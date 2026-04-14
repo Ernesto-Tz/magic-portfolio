@@ -1,19 +1,29 @@
 import { notFound } from "next/navigation";
-import { CustomMDX } from "@/components/mdx";
-import { getPosts } from "@/app/utils/utils";
-import { about, work, person, baseURL } from "@/app/resources";
+import { PortableText, PortableTextBlock } from "@portabletext/react";
+import { baseURL } from "@/app/resources";
 import { formatDate } from "@/app/utils/formatDate";
 import { JsonLd } from "@/components/JsonLd";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
+import { SanityImageSource } from "@sanity/image-url";
+import { sanityFetch } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
+import {
+  WORK_PROJECT_BY_SLUG_QUERY,
+  ALL_WORK_PROJECT_SLUGS_QUERY,
+  ALL_SKILLS_QUERY,
+  PERSON_QUERY,
+} from "@/sanity/lib/queries";
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const posts = getPosts(["src", "app", "work", "projects"]);
-  return posts.map((post) => ({ slug: post.slug }));
+  const projects = await sanityFetch<{ slug: string }[]>({
+    query: ALL_WORK_PROJECT_SLUGS_QUERY,
+    tags: ["workProject"],
+  });
+  return projects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -22,15 +32,27 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPosts(["src", "app", "work", "projects"]).find((p) => p.slug === slug);
-  if (!post) return {};
+  const project = await sanityFetch<{
+    title: string;
+    summary: string;
+    coverImage: SanityImageSource | null;
+  } | null>({
+    query: WORK_PROJECT_BY_SLUG_QUERY,
+    params: { slug },
+    tags: ["workProject"],
+  });
+  if (!project) return {};
   return {
-    title: post.metadata.title,
-    description: post.metadata.summary,
+    title: project.title,
+    description: project.summary,
     openGraph: {
-      title: post.metadata.title,
-      description: post.metadata.summary,
-      images: [post.metadata.image ? `${baseURL}${post.metadata.image}` : `${baseURL}/og?title=${post.metadata.title}`],
+      title: project.title,
+      description: project.summary,
+      images: [
+        project.coverImage
+          ? urlFor(project.coverImage).width(1200).url()
+          : `${baseURL}/og?title=${encodeURIComponent(project.title)}`,
+      ],
     },
   };
 }
@@ -41,14 +63,34 @@ export default async function WorkPost({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPosts(["src", "app", "work", "projects"]).find((p) => p.slug === slug);
 
-  if (!post) notFound();
+  const [project, skills, person] = await Promise.all([
+    sanityFetch<{
+      _id: string;
+      title: string;
+      slug: string;
+      summary: string;
+      publishedAt: string;
+      body: PortableTextBlock[];
+    } | null>({
+      query: WORK_PROJECT_BY_SLUG_QUERY,
+      params: { slug },
+      tags: ["workProject"],
+    }),
+    sanityFetch<{ _id: string; title: string; projects?: string[] }[]>({
+      query: ALL_SKILLS_QUERY,
+      tags: ["skill"],
+    }),
+    sanityFetch<{ name: string }>({
+      query: PERSON_QUERY,
+      tags: ["person"],
+    }),
+  ]);
 
-  const avatars = post.metadata.team?.map((p: { avatar: string }) => ({ src: p.avatar })) || [];
-  const techSkills = person.skills.filter(
-    (skill: { title: string; projects?: string[] }) =>
-      Array.isArray(skill.projects) && skill.projects.includes(post.slug)
+  if (!project) notFound();
+
+  const techSkills = skills.filter(
+    (s) => Array.isArray(s.projects) && s.projects.includes(slug)
   );
 
   return (
@@ -56,14 +98,14 @@ export default async function WorkPost({
       <JsonLd
         type="WebPage"
         baseURL={baseURL}
-        path={`${work.path}/${post.slug}`}
-        title={post.metadata.title}
-        description={post.metadata.summary}
-        image={`${baseURL}/og?title=${encodeURIComponent(post.metadata.title)}`}
+        path={`/work/${project.slug}`}
+        title={project.title}
+        description={project.summary}
+        image={`${baseURL}/og?title=${encodeURIComponent(project.title)}`}
         author={{
           name: person.name,
-          url: `${baseURL}${about.path}`,
-          image: `${baseURL}${person.avatar}`,
+          url: `${baseURL}/about`,
+          image: "",
         }}
       />
       <Button asChild variant="ghost" size="sm" className="w-fit -ml-2 gap-1 text-muted-foreground">
@@ -72,31 +114,19 @@ export default async function WorkPost({
           Work
         </Link>
       </Button>
-      <h1 className="text-3xl font-bold font-primary">{post.metadata.title}</h1>
-      <div className="flex items-center gap-3">
-        {avatars.length > 0 && (
-          <div className="flex">
-            {avatars.map((avatar: { src: string }, i: number) => (
-              <Avatar key={i} className="w-6 h-6 border-2 border-background" style={{ marginLeft: i > 0 ? "-6px" : 0 }}>
-                <AvatarImage src={avatar.src} />
-                <AvatarFallback>?</AvatarFallback>
-              </Avatar>
-            ))}
-          </div>
-        )}
-        <p className="text-sm text-muted-foreground">
-          {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
-        </p>
-      </div>
-      <article className="w-full">
-        <CustomMDX source={post.content} />
+      <h1 className="text-3xl font-bold font-primary">{project.title}</h1>
+      <p className="text-sm text-muted-foreground">
+        {project.publishedAt && formatDate(project.publishedAt)}
+      </p>
+      <article className="w-full prose prose-invert max-w-none">
+        <PortableText value={project.body} />
       </article>
       {techSkills.length > 0 && (
         <div className="flex flex-col gap-4 mt-4">
           <h2 className="text-2xl font-bold font-primary">Technologies Used</h2>
           <div className="flex flex-wrap gap-2">
-            {techSkills.map((skill: { title: string }, index: number) => (
-              <Badge key={`${skill.title}-${index}`} variant="secondary">
+            {techSkills.map((skill) => (
+              <Badge key={skill._id} variant="secondary">
                 {skill.title}
               </Badge>
             ))}
