@@ -4,19 +4,19 @@ import "./globals.css";
 
 import { ThemeProvider } from "next-themes";
 import { Footer, Header, RouteGuard } from "@/components";
-import { baseURL, font, home } from "@/app/resources";
+import { baseURL, font, site } from "@/app/resources";
 import { Background } from "@/components/Background";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: home.title,
-  description: home.description,
+  title: site.title,
+  description: site.description,
   metadataBase: new URL(baseURL),
   openGraph: {
-    title: home.title,
-    description: home.description,
+    title: site.title,
+    description: site.description,
     url: baseURL,
-    images: [home.image],
+    images: [site.image],
   },
 };
 

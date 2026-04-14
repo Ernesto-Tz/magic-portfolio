@@ -9,6 +9,7 @@ export {
   baseURL,
   font,
   nav,
+  site,
 } from "@/app/resources/config";
 export {
   person,

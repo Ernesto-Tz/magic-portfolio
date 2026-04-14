@@ -155,4 +155,10 @@ const nav = {
   sportsLabel: "Sports",
 };
 
-export { routes, protectedRoutes, effects, style, display, mailchimp, baseURL, font, nav };
+const site = {
+  title: "Ernesto Tzompantzi's Portfolio",
+  description: "Portfolio website showcasing my work as a Frontend Developer",
+  image: "/images/og/home.jpg",
+};
+
+export { routes, protectedRoutes, effects, style, display, mailchimp, baseURL, font, nav, site };

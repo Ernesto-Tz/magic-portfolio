@@ -1,21 +1,20 @@
-import mdx from "@next/mdx";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
 
-const withMDX = mdx({
-  extension: /\.mdx?$/,
-  options: {},
-});
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  pageExtensions: ["ts", "tsx", "md", "mdx"],
-  transpilePackages: ["next-mdx-remote"],
+  pageExtensions: ["ts", "tsx"],
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.sanity.io" },
     ],
+  },
+  async redirects() {
+    return [
+      { source: "/blog", destination: "/sports", permanent: true },
+      { source: "/blog/:slug", destination: "/sports/:slug", permanent: true },
+    ];
   },
   webpack(config, { isServer }) {
     // Next.js 15.4.10 ships a vendored React (next/dist/compiled/react) that
@@ -44,4 +43,4 @@ const nextConfig = {
   },
 };
 
-export default withMDX(nextConfig);
+export default nextConfig;
