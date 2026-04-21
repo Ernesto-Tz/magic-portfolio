@@ -2,10 +2,7 @@
 export {
   routes,
   protectedRoutes,
-  effects,
-  style,
   display,
-  mailchimp,
   baseURL,
   font,
   nav,
