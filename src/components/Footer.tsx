@@ -29,17 +29,7 @@ export const Footer = async () => {
       <footer className="w-full flex justify-center px-2 py-2">
         <div className="w-full max-w-screen-md flex items-center justify-between px-4 py-2">
           <p className="text-xs text-muted-foreground">
-            © {currentYear} /{" "}
-            <span className="text-foreground">{person.name}</span>
-            {" "}/ Build your portfolio with{" "}
-            <Link
-              href="https://once-ui.com/templates/magic-portfolio"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-2 hover:text-foreground transition-colors"
-            >
-              Once UI
-            </Link>
+            © {currentYear} / <span className="text-foreground">{person.name}</span>
           </p>
           <div className="flex gap-1">
             {socialLinks.map((item) => {
