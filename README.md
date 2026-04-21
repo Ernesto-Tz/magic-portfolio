@@ -1,94 +1,103 @@
-# **Magic Portfolio by Once UI**
+# **Magic Portfolio**
 
-View the [demo here](https://demo.magic-portfolio.com).
+View the [demo here](https://ernesto-tzompantzi.com).
 
-![Magic Portfolio](https://demo.magic-portfolio.com/images/og/home.jpg)
+![Magic Portfolio](https://ernesto-tzompantzi.com/images/og/home.jpg)
 
 
 # **Getting started**
 
-Magic Portfolio was built with [Once UI](https://once-ui.com) for [Next.js](https://nextjs.org). It requires Node.js v18.17+.
+Magic Portfolio is a modern portfolio website built with [Next.js](https://nextjs.org), [React](https://react.dev), [TypeScript](https://www.typescriptlang.org), [Tailwind CSS](https://tailwindcss.com), and [Sanity CMS](https://www.sanity.io). It requires Node.js v18.17+ and uses pnpm as the package manager.
 
 **1. Clone the repository**
-```
-git clone https://github.com/once-ui-system/magic-portfolio.git
+```bash
+git clone https://github.com/Ernesto-Tz/magic-portfolio.git
+cd magic-portfolio
 ```
 
 **2. Install dependencies**
-```
-npm install
-```
-
-**3. Run dev server**
-```
-npm run dev
+```bash
+pnpm install
 ```
 
-**4. Edit config**
+**3. Set up environment variables**
+
+Create a `.env.local` file with your Sanity CMS credentials:
 ```
-src/app/resources/config
+NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+NEXT_PUBLIC_SANITY_DATASET=your_dataset
+NEXT_PUBLIC_SANITY_API_VERSION=2024-01-01
 ```
+
+**4. Run dev server**
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view your portfolio.
 
 **5. Edit content**
-```
-src/app/resources/content
-```
 
-**6. Create blog posts / projects**
-```
-Add a new .mdx file to src/app/blog/posts or src/app/work/projects
-```
-
-# **Documentation**
-
-Docs available at: [docs.once-ui.com](https://docs.once-ui.com/docs/magic-portfolio/quick-start)
+Configure your portfolio in `src/app/resources/config.js` and manage content through the Sanity Studio at `/studio`.
 
 # **Features**
 
-## **Once UI**
-- All tokens, components & features of [Once UI](https://once-ui.com)
+## **Built with Modern Stack**
+- Next.js 15 with App Router
+- React 19
+- TypeScript for type safety
+- Tailwind CSS v4 for styling
+- ShadCN/ui components
+- Sanity CMS for content management
 
-## **SEO**
+## **SEO & Analytics**
 - Automatic open-graph and X image generation with next/og
-- Automatic schema and metadata generation based on the content file
+- Automatic schema and metadata generation
+- Vercel Analytics integration
+- Dynamic sitemap generation
 
 ## **Design**
 - Responsive layout optimized for all screen sizes
-- Timeless design without heavy animations and motion
-- Endless customization options through [data attributes](https://once-ui.com/docs/theming)
+- Dark/Light theme switcher
+- Smooth animations with Framer Motion
+- Custom font stack: Fraunces, Instrument Sans, JetBrains Mono
 
-## **Content**
-- Render sections conditionally based on the content file
-- Enable or disable pages for blog, work, gallery and about / CV
-- Generate and display social links automatically
-- Set up password protection for URLs
+## **Content Management**
+- Sanity Studio integration for easy content editing
+- Support for projects, sports/blog posts, gallery, and about page
+- Social links management
+- Password-protected routes for sensitive content
 
-## **Localization**
-- A localized version of Magic Portfolio is available with the next-intl library
-- To use localization, switch to the 'i18n' branch
+## **Developer Experience**
+- Type-safe TypeScript configuration
+- ESLint and Biome for code quality
+- Structured folder organization
+- Easy customization through config files
 
-# **Authors**
+# **Customization**
 
-Connect with us on Threads or LinkedIn.
+### Colors & Theme
+Edit the CSS variables in `src/app/globals.css` to customize the color scheme.
 
-Lorant Toth: [Threads](https://www.threads.net/@lorant.one), [LinkedIn](https://www.linkedin.com/in/tothlorant/)  
-Zsofia Komaromi: [Threads](https://www.threads.net/@zsofia_kom), [LinkedIn](https://www.linkedin.com/in/zsofiakomaromi/)
+### Content
+- Edit the Sanity schema files in `src/sanity/schemaTypes/`
+- Access Sanity Studio at `/studio` to manage your content
 
-Localization added by [François Hernandez](https://github.com/francoishernandez)
+### Configuration
+Update `src/app/resources/config.js` for:
+- Site metadata
+- Font families
+- Display options
+- Navigation labels
 
-# **Get involved**
+# **Deployment**
 
-- Join the [Design Engineers Club on Discord](https://discord.com/invite/5EyAQ4eNdS) and share your portfolio with us!
-- Report a [bug](https://github.com/once-ui-system/magic-portfolio/issues/new?labels=bug&template=bug_report.md).
+This portfolio is optimized for deployment on [Vercel](https://vercel.com). Simply connect your GitHub repository to Vercel and your portfolio will be automatically deployed on every push to the main branch.
+
+## **Deploy with Vercel**
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FErnesto-Tz%2Fmagic-portfolio)
 
 # **License**
 
-Distributed under the CC BY-NC 4.0 License.
-- Commercial usage is not allowed.
-- Attribution is required.
-- You can extend the license to commercial use by purchasing a [Once UI Pro](https://once-ui.com/pricing) license.
-
-See `LICENSE.txt` for more information.
-
-# **Deploy with Vercel**
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&project-name=portfolio&repository-name=portfolio&redirect-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&demo-title=Magic%20Portfolio&demo-description=Showcase%20your%20designers%20or%20developer%20portfolio&demo-url=https%3A%2F%2Fdemo.magic-portfolio.com&demo-image=%2F%2Fraw.githubusercontent.com%2Fonce-ui-system%2Fmagic-portfolio%2Fmain%2Fpublic%2Fimages%2Fog%2Fhome.jpg)
+MIT License - feel free to use this as a template for your own portfolio.
